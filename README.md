@@ -65,11 +65,23 @@ El programa crea dos carpetas automáticamente:
 ```
 
 **Importante:** Los nombres de archivo deben seguir este formato:
-- TPs: `TP1_1K2.csv`, `TP2_1K4.csv`, etc.
-- Parciales: `Parcial1_1K2.csv`, `Parcial2_1K4.csv`
-- Recuperatorios: `Recuperatorio1_1K2.csv`
 
-> 💡 **Tip:** El código del curso (ej: `1K2`, `1K4`) debe estar al final del nombre del archivo.
+**Trabajos Prácticos:**
+- `TP1_1K2.csv`, `TP2_1K4.csv`, etc.
+
+**Parciales y Recuperatorios (formato simple):**
+- `Parcial1_1K2.csv`, `Parcial2_1K4.csv`
+- `Recuperatorio1_1K2.csv`, `Recuperatorio2_1K4.csv`
+
+**Parciales y Recuperatorios (múltiples archivos):**
+
+Si Moodle exportó el mismo parcial/recuperatorio en varios archivos, puedes usar sufijos numéricos:
+- `Parcial1_1K2_1.csv`, `Parcial1_1K2_2.csv`, `Parcial1_1K2_3.csv`
+- `Recuperatorio1_1K4_1.csv`, `Recuperatorio1_1K4_2.csv`
+
+> 💡 **Tip:** El código del curso (ej: `1K2`, `1K4`) debe estar al final del nombre base del archivo.
+
+> ✨ **¡El sistema es inteligente!** Si tienes múltiples archivos del mismo parcial (ej: `Parcial1_1K2_1.csv` y `Parcial1_1K2_2.csv`), el programa automáticamente los **consolida** tomando la mejor nota de cada alumno entre todos los archivos.
 
 ---
 
@@ -254,7 +266,29 @@ Aparecerá como "Falta" en la planilla.
 
 ### Tengo múltiples archivos del mismo parcial (ej: Parcial1_1K2_1.csv, Parcial1_1K2_2.csv)
 
-¡No hay problema! El sistema los detecta automáticamente y los consolida, tomando la mejor nota de cada alumno.
+¡No hay problema! El sistema los detecta automáticamente y los consolida.
+
+**Cómo funciona:**
+1. Nombra los archivos con sufijos numéricos: `Parcial1_1K2_1.csv`, `Parcial1_1K2_2.csv`, `Parcial1_1K2_3.csv`, etc.
+2. Colócalos todos en la carpeta `inputs/`
+3. El programa automáticamente:
+   - Detecta que son del mismo parcial
+   - Los consolida en un solo archivo
+   - Toma la **mejor nota** de cada alumno entre todos los archivos
+   - Genera `Parcial1_1K2_filtrado.csv` con el resultado
+
+**Ejemplo:**
+```
+inputs/
+├── Parcial1_1K2_1.csv  (Alumno García: 7.5)
+├── Parcial1_1K2_2.csv  (Alumno García: 8.0)  ← Se toma esta nota
+└── Parcial1_1K2_3.csv  (Alumno García: 6.5)
+
+Resultado en outputs/1K2/Parcial1_1K2_filtrado.csv:
+→ Alumno García: 8.0
+```
+
+Esto funciona tanto para **Parciales** como para **Recuperatorios**.
 
 ### ¿Cómo convierten las notas?
 
