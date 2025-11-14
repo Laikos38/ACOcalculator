@@ -1,0 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.venv
+
+# UV (no ignorar uv.lock - necesario para reproducibilidad)
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+acocalculator.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+.hypothesis/
+
+# Build / Distribution
+build/
+dist/
+release/
+*.spec.bak
+*.egg-info/
+*.dmg
+*.pkg
+*.zip
+
+# Output files (mantener estructura pero no contenido)
+outputs/*/
+!outputs/.gitkeep
+
+# Input files (opcional - descomenta si no quieres commitear datos)
+# inputs/*
+# !inputs/.gitkeep
+
+# Archivos temporales
+*.tmp
+*.bak
+*.backup
+
+# Sistema
+Thumbs.db
+.DS_Store
+
+# Jupyter Notebook (por si agregas notebooks en el futuro)
+.ipynb_checkpoints
+
+# Archivos de prueba
+test_*.csv
+prueba_*.csv
+
+htmlcov/
