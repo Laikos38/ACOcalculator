@@ -7,7 +7,6 @@
 
 ### 📖 Guías Principales
 - **[README Principal](../README.md)** - Documentación completa del proyecto (en la raíz)
-- **[CHANGELOG.md](CHANGELOG.md)** - Historial de cambios y versiones
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guía para contribuir al proyecto
 
 ### ⚙️ Configuración
@@ -16,19 +15,13 @@
 
 ### 🔧 Desarrollo
 - **[UV_GUIDE.md](UV_GUIDE.md)** - Guía completa de UV (gestor de paquetes)
-- **[UV_INTEGRATION.md](UV_INTEGRATION.md)** - Integración de UV en el proyecto
-- **[RESUMEN_UV.md](RESUMEN_UV.md)** - Resumen de comandos UV
 
 ### 🧪 Testing
 - **[TESTING.md](TESTING.md)** - Documentación completa de testing
-- **[RESUMEN_TESTING.md](RESUMEN_TESTING.md)** - Resumen rápido de testing
 
 ### 📦 Binarios y Distribución
 - **[BUILD.md](BUILD.md)** - Guía para construir binarios
 - **[BINARY_USAGE.md](BINARY_USAGE.md)** - Uso de binarios generados
-
-### 📝 Resúmenes
-- **[RESUMEN_CAMBIOS.md](RESUMEN_CAMBIOS.md)** - Resumen de cambios de arquitectura
 
 ## 🗂️ Estructura de la Documentación
 
@@ -40,27 +33,20 @@ docs/
 │   └── QUICK_START.md
 │
 ├── 📖 Documentación Principal
-│   ├── CHANGELOG.md
 │   └── CONTRIBUTING.md
 │
 ├── ⚙️ Configuración
 │   └── CONFIGURATION.md
 │
 ├── 🔧 Desarrollo
-│   ├── UV_GUIDE.md
-│   ├── UV_INTEGRATION.md
-│   └── RESUMEN_UV.md
+│   └── UV_GUIDE.md
 │
 ├── 🧪 Testing
-│   ├── TESTING.md
-│   └── RESUMEN_TESTING.md
+│   └── TESTING.md
 │
-├── 📦 Binarios
-│   ├── BUILD.md
-│   └── BINARY_USAGE.md
-│
-└── 📝 Resúmenes
-    └── RESUMEN_CAMBIOS.md
+└── 📦 Binarios
+    ├── BUILD.md
+    └── BINARY_USAGE.md
 ```
 
 ## 🔍 ¿Qué documento necesito?
@@ -72,9 +58,8 @@ docs/
 | Configurar el sistema                       | [CONFIGURATION.md](CONFIGURATION.md) |
 | Instalar dependencias con UV                | [UV_GUIDE.md](UV_GUIDE.md) |
 | Ejecutar tests                              | [TESTING.md](TESTING.md) |
-| Generar binarios para macOS                 | [BUILD.md](BUILD.md) |
+| Generar binarios (Windows/macOS/Linux)      | [BUILD.md](BUILD.md) |
 | Usar el binario generado                    | [BINARY_USAGE.md](BINARY_USAGE.md) |
-| Ver el historial de cambios                 | [CHANGELOG.md](CHANGELOG.md) |
 | Contribuir al proyecto                      | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 ## 📌 Notas

@@ -4,6 +4,15 @@
 
 ACOCalculator puede compilarse en ejecutables standalone que **no requieren Python instalado**. Esto es ideal para distribuir a usuarios finales.
 
+**Plataformas soportadas:**
+- 🍎 macOS (Intel y Apple Silicon)
+- 🪟 Windows (x64, x86)
+- 🐧 Linux (x86_64, arm64, etc.)
+
+> ⚠️ **Nota importante**: Los binarios deben compilarse en el SO objetivo. Un binario compilado en Windows no funcionará en macOS o Linux, y viceversa.
+
+---
+
 ## 🍎 Construir para macOS
 
 ### Requisitos
@@ -59,21 +68,152 @@ open dist/ACOCalculator.app
 ⚠️ **Primera ejecución**: macOS puede mostrar advertencia de seguridad.
 Solución: Click derecho → Abrir → Confirmar
 
-## 📤 Distribución
+---
 
-### Crear ZIP para Distribución
+## 🪟 Construir para Windows
+
+### Requisitos
+
+- Windows 10 o superior
+- UV instalado ([Descargar aquí](https://github.com/astral-sh/uv))
+- 500 MB de espacio libre
+
+### Construcción Rápida
+
+**Opción 1: Usando CMD o PowerShell**
+
+```cmd
+REM Ejecutar script batch
+scripts\build-windows.bat
+```
+
+**Opción 2: Usando Git Bash o WSL**
 
 ```bash
-# Comprimir el bundle
+# Convertir y ejecutar (si no hay permisos)
+chmod +x scripts/build-windows.bat
+./scripts/build-windows.bat
+```
+
+Este script:
+1. ✅ Instala PyInstaller automáticamente
+2. ✅ Limpia builds anteriores
+3. ✅ Construye el ejecutable
+4. ✅ Verifica el binario generado
+
+### Salida Generada
+
+Después del build, encontrarás en `dist/`:
+
+```
+dist/
+└── ACOCalculator.exe      # Ejecutable Windows (standalone)
+```
+
+### Ejecutar el Binario
+
+```cmd
+REM Opción 1: Doble clic en el archivo
+REM Opción 2: Desde CMD
+.\dist\ACOCalculator.exe
+
+REM Opción 3: Desde PowerShell
+.\dist\ACOCalculator.exe
+```
+
+### Distribución para Windows
+
+```cmd
+REM Opción 1: ZIP simple
+cd dist
+tar -a -c -f ACOCalculator-windows-v1.0.0.zip ACOCalculator.exe
+
+REM Opción 2: Instalador profesional con InnoSetup o NSIS
+```
+
+⚠️ **Windows Defender**: Puede mostrar advertencia en primera ejecución. Esto es normal para binarios sin firma digital.
+
+---
+
+## 🐧 Construir para Linux
+
+### Requisitos
+
+- Linux (Ubuntu, Debian, Fedora, Arch, etc.)
+- UV instalado
+- 500 MB de espacio libre
+
+### Construcción Rápida
+
+```bash
+# Dar permisos de ejecución (primera vez)
+chmod +x scripts/build-linux.sh
+
+# Generar ejecutable
+./scripts/build-linux.sh
+```
+
+Este script:
+1. ✅ Instala PyInstaller automáticamente
+2. ✅ Limpia builds anteriores
+3. ✅ Construye el ejecutable
+4. ✅ Configura permisos de ejecución
+5. ✅ Verifica el binario generado
+
+### Salida Generada
+
+Después del build, encontrarás en `dist/`:
+
+```
+dist/
+└── ACOCalculator          # Ejecutable Linux (standalone)
+```
+
+### Ejecutar el Binario
+
+```bash
+# Desde terminal
+./dist/ACOCalculator
+
+# Copiar a cualquier ubicación
+cp dist/ACOCalculator ~/bin/
+~/bin/ACOCalculator
+```
+
+### Distribución para Linux
+
+```bash
+# Crear tarball con arquitectura en el nombre
+tar -czf ACOCalculator-linux-$(uname -m)-v1.0.0.tar.gz -C dist ACOCalculator
+
+# El archivo resultante será:
+# - ACOCalculator-linux-x86_64-v1.0.0.tar.gz (Intel/AMD 64-bit)
+# - ACOCalculator-linux-aarch64-v1.0.0.tar.gz (ARM 64-bit)
+```
+
+⚠️ **Compatibilidad**: El binario Linux funciona solo en la misma arquitectura donde se compiló. Para soportar múltiples arquitecturas, compila en cada una.
+
+---
+
+## 📤 Distribución Multi-Plataforma
+
+### Crear Paquetes para GitHub Releases
+
+```bash
+# macOS
 cd dist
 zip -r ACOCalculator-macos-v1.0.0.zip ACOCalculator.app
 
-# El ZIP resultante se puede compartir
+# Windows (desde PowerShell)
+Compress-Archive -Path dist\ACOCalculator.exe -DestinationPath ACOCalculator-windows-v1.0.0.zip
+
+# Linux
+tar -czf ACOCalculator-linux-$(uname -m)-v1.0.0.tar.gz -C dist ACOCalculator
 ```
 
-### Crear DMG Profesional (Opcional)
+### Crear DMG para macOS (Opcional)
 
-Para distribución más profesional, crea un DMG:
+Para distribución más profesional en macOS:
 
 ```bash
 # Instalar create-dmg (una sola vez)
@@ -89,6 +229,15 @@ create-dmg \
   --app-drop-link 425 120 \
   "ACOCalculator-v1.0.0.dmg" \
   "dist/ACOCalculator.app"
+```
+
+### Estructura de Release Completo
+
+```
+releases/
+├── ACOCalculator-macos-v1.0.0.zip          # macOS (Intel + M1/M2)
+├── ACOCalculator-windows-v1.0.0.zip        # Windows (x64)
+└── ACOCalculator-linux-x86_64-v1.0.0.tar.gz # Linux (x86_64)
 ```
 
 ## ⚙️ Configuración Avanzada
@@ -130,16 +279,6 @@ a = Analysis(
         ('assets/', 'assets/'),  # Carpeta completa
     ],
 )
-```
-
-### Reducir Tamaño del Ejecutable
-
-```bash
-# Habilitar compresión UPX (ya activada por defecto)
-upx=True
-
-# Excluir módulos de testing
-excludes=['pytest', 'faker', 'factory', '_pytest', 'tests']
 ```
 
 ## 🔍 Debugging del Build
@@ -186,169 +325,31 @@ datas=[
 ],
 ```
 
-#### Bundle No Abre en macOS
-
-**Solución**: Firmar el bundle:
-
-```bash
-codesign --force --deep --sign - dist/ACOCalculator.app
-```
-
-## 📊 Información del Binario
-
-### Tamaños Típicos
-
-- **Ejecutable CLI**: ~15-20 MB
-- **Bundle .app**: ~25-30 MB
-- **DMG comprimido**: ~10-15 MB
-
-Los binarios incluyen:
-- ✅ Intérprete Python
-- ✅ Todas las dependencias (xlwt, etc.)
-- ✅ Código fuente del proyecto
-- ✅ Archivo de configuración
-
-### Verificar Binario
-
-```bash
-# Ver tamaño
-du -sh dist/ACOCalculator
-
-# Ver arquitectura
-file dist/ACOCalculator
-
-# Probar ejecución
-./dist/ACOCalculator --help
-```
-
-## 🏗️ Build Automatizado (CI/CD)
-
-### GitHub Actions (Ejemplo)
-
-```yaml
-name: Build macOS
-
-on:
-  release:
-    types: [created]
-
-jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Install UV
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-      
-      - name: Build binary
-        run: ./scripts/build-macos.sh
-      
-      - name: Create ZIP
-        run: |
-          cd dist
-          zip -r ACOCalculator-macos.zip ACOCalculator.app
-      
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          asset_path: dist/ACOCalculator-macos.zip
-          asset_name: ACOCalculator-macos-${{ github.ref_name }}.zip
-```
-
-## 🔐 Firma y Notarización (macOS)
-
-Para distribución fuera de la Mac App Store:
-
-### 1. Obtener Certificado de Desarrollador
-
-```bash
-# Verificar certificados instalados
-security find-identity -v -p codesigning
-```
-
-### 2. Firmar el Bundle
-
-```bash
-codesign --deep --force \
-  --sign "Developer ID Application: Tu Nombre" \
-  dist/ACOCalculator.app
-```
-
-### 3. Notarizar (Opcional)
-
-```bash
-# Comprimir
-ditto -c -k --keepParent dist/ACOCalculator.app ACOCalculator.zip
-
-# Subir para notarización
-xcrun notarytool submit ACOCalculator.zip \
-  --apple-id tu@email.com \
-  --team-id TEAMID \
-  --password app-specific-password
-```
-
-## 📝 Checklist de Distribución
-
-Antes de distribuir, verificar:
-
-- [ ] El ejecutable se ejecuta sin errores
-- [ ] `config.ini` está incluido
-- [ ] Los directorios `inputs/` y `outputs/` se crean automáticamente
-- [ ] El menú funciona correctamente
-- [ ] Todas las funcionalidades (filtrar, mergear, generar) funcionan
-- [ ] El tamaño del binario es razonable (< 50 MB)
-- [ ] Probado en un Mac limpio (sin Python instalado)
-- [ ] Incluye README o documentación básica
-- [ ] Versión correcta en el nombre del archivo
-
-## 🆘 Soporte
-
-### Reportar Problemas con Binarios
-
-Si el binario no funciona:
-
-1. Ejecutar desde terminal para ver errores:
-   ```bash
-   ./dist/ACOCalculator
-   ```
-
-2. Verificar logs en:
-   ```bash
-   # macOS
-   ~/Library/Logs/ACOCalculator/
-   ```
-
-3. Probar versión debug:
-   ```bash
-   # Editar acocalculator.spec
-   debug=True
-   # Reconstruir
-   ./scripts/build-macos.sh
-   ```
 
 ## 📚 Recursos Adicionales
 
 - **PyInstaller Docs**: https://pyinstaller.org/
-- **macOS Code Signing**: https://developer.apple.com/support/code-signing/
-- **create-dmg**: https://github.com/create-dmg/create-dmg
 
 ---
 
 ## 🎯 TL;DR - Resumen Rápido
 
+### macOS
 ```bash
-# Construir
 ./scripts/build-macos.sh
-
-# Ejecutar
 ./dist/ACOCalculator
-# o
-open dist/ACOCalculator.app
-
-# Distribuir
-cd dist && zip -r ACOCalculator-macos.zip ACOCalculator.app
+# o: open dist/ACOCalculator.app
 ```
 
-**El ejecutable funciona en cualquier Mac sin Python instalado.** 🎉
+### Windows
+```cmd
+scripts\build-windows.bat
+.\dist\ACOCalculator.exe
+```
 
+### Linux
+```bash
+chmod +x scripts/build-linux.sh
+./scripts/build-linux.sh
+./dist/ACOCalculator
+```

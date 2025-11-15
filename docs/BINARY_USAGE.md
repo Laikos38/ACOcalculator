@@ -4,8 +4,11 @@
 
 El binario `ACOCalculator` es **completamente standalone** y funciona sin ninguna instalación previa.
 
+> **Disponible para:** 🍎 macOS | 🪟 Windows | 🐧 Linux
+
 ### Primer Uso
 
+**macOS / Linux:**
 ```bash
 # 1. Copiar el binario a cualquier directorio
 cp dist/ACOCalculator ~/Desktop/
@@ -15,6 +18,17 @@ cd ~/Desktop/
 
 # 3. Ejecutar (primera vez)
 ./ACOCalculator
+```
+
+**Windows:**
+```cmd
+REM 1. Copiar ACOCalculator.exe al escritorio
+
+REM 2. Ir al directorio
+cd %USERPROFILE%\Desktop
+
+REM 3. Ejecutar (primera vez)
+ACOCalculator.exe
 ```
 
 ### Qué Sucede en la Primera Ejecución
@@ -130,57 +144,6 @@ outputs/1K2/
 └── Planilla_Final_1K2.xls
 ```
 
-## 📋 Ejemplo Completo
-
-### Escenario: Procesar notas del curso 1K2
-
-```bash
-# 1. Preparar
-cd ~/cursos_2024
-cp /path/to/ACOCalculator .
-./ACOCalculator
-q
-
-# 2. Agregar CSVs
-cp ~/Downloads/TP*.csv inputs/
-cp ~/Downloads/Parcial*.csv inputs/
-
-# 3. Procesar
-./ACOCalculator
-
-# En el menú:
-# 2 → Enter → 1K2 → Enter    (Mergear TPs)
-# 3 → Enter → 1K2 → Enter    (Mergear Parciales)
-# 4 → Enter → 1K2 → Enter    (Generar planilla final)
-# q → Enter                   (Salir)
-
-# 4. Resultado
-open outputs/1K2/Planilla_Final_1K2.xls
-```
-
-## 🔧 Personalización
-
-### Cambiar Nombres de Directorios
-
-Edita `config.ini`:
-
-```ini
-[Directorios]
-source_dir = mis_datos
-output_dir = resultados
-```
-
-La próxima ejecución usará:
-- `mis_datos/` en lugar de `inputs/`
-- `resultados/` en lugar de `outputs/`
-
-### Cambiar Cantidad de TPs
-
-```ini
-[TrabajoPractico]
-cantidad_tps = 6
-```
-
 ## 🚚 Distribución
 
 ### Compartir con Otros Usuarios
@@ -234,40 +197,6 @@ cd ~/mi_proyecto/
 
 **Los directorios siempre se crean junto al binario**, no importa desde dónde lo ejecutes.
 
-### Primera Ejecución en macOS
-
-macOS puede mostrar advertencia de seguridad:
-
-```
-"ACOCalculator" no puede abrirse porque Apple no puede
-verificar si contiene software malicioso.
-```
-
-**Solución:**
-1. Click derecho en `ACOCalculator`
-2. Seleccionar "Abrir"
-3. Confirmar "Abrir" en el diálogo
-
-Esto solo se pide la primera vez.
-
-### Múltiples Proyectos
-
-Puedes tener múltiples copias del binario:
-
-```bash
-~/proyectos/
-├── curso_2024_1/
-│   ├── ACOCalculator
-│   ├── inputs/
-│   └── outputs/
-└── curso_2024_2/
-    ├── ACOCalculator
-    ├── inputs/
-    └── outputs/
-```
-
-Cada una trabaja independientemente.
-
 ## 🔍 Verificación
 
 ### Comprobar que Funciona
@@ -296,63 +225,6 @@ El binario muestra al iniciar:
 ```
 
 Este es el directorio donde se crearán `inputs/` y `outputs/`, independientemente de desde dónde ejecutes el binario.
-
-## 💡 Tips y Trucos
-
-### Ejecutar desde Cualquier Lugar
-
-Agregar a PATH (opcional):
-
-```bash
-# Agregar a ~/.zshrc o ~/.bash_profile
-export PATH="$HOME/bin:$PATH"
-
-# Copiar binario
-mkdir -p ~/bin
-cp dist/ACOCalculator ~/bin/
-
-# Ahora desde cualquier directorio:
-cd ~/mi_proyecto/
-ACOCalculator  # Funciona desde cualquier lugar
-```
-
-### Automatizar con Scripts
-
-```bash
-#!/bin/bash
-# proceso_curso.sh
-
-CURSO=$1
-
-./ACOCalculator << EOF
-2
-${CURSO}
-3
-${CURSO}
-4
-${CURSO}
-q
-EOF
-```
-
-Uso:
-```bash
-chmod +x proceso_curso.sh
-./proceso_curso.sh 1K2
-```
-
-### Ver Archivos Procesados
-
-```bash
-# Ver últimos archivos generados
-ls -lt outputs/1K2/ | head
-
-# Contar CSVs en inputs
-ls inputs/*.csv | wc -l
-
-# Ver tamaño de outputs
-du -sh outputs/
-```
 
 ## 📊 Troubleshooting
 
@@ -383,7 +255,7 @@ chmod +x ACOCalculator
 
 ## 📖 Documentación Completa
 
-- **BUILD.md** - Cómo construir binarios
+- **BUILD.md** - Cómo construir binarios (macOS, Windows, Linux)
 - **CONFIGURATION.md** - Guía de configuración
 - **README.md** - Documentación general
 

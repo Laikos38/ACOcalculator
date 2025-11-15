@@ -22,11 +22,9 @@ Este sistema te ayuda a procesar las calificaciones de Moodle de forma automáti
 
 ### Opción 1: Usar el Ejecutable (Recomendado para usuarios)
 
-**¿No tienes Python instalado? ¡No hay problema!**
-
-1. **Descarga el ejecutable** desde [Releases](https://github.com/Laikos38/ACOcalculator/releases)
-2. **Doble clic** en `ACOCalculator` (o `ACOCalculator.app` en macOS)
-3. **¡Listo!** El programa crea las carpetas necesarias automáticamente
+1. Descarga el ejecutable que corresponda según tu SO desde [Releases](https://github.com/Laikos38/ACOcalculator/releases)
+2. Doble click para ejecutar
+3. ¡Listo! El programa crea las carpetas necesarias automáticamente
 
 ### Opción 2: Ejecutar con Python
 
@@ -51,8 +49,8 @@ python main.py
 ### Paso 1: Exportar desde Moodle
 
 1. Entra a tu curso en Moodle
-2. Ve a **Calificaciones** → **Exportar**
-3. Selecciona formato **CSV**
+2. Ve al TP, parcial o recuperatorio que desees procesar, luego click en "Ver intentos" 
+3. Selecciona formato **CSV** y modifica el tamaño de la página para que incluya todos los intentos
 4. Exporta el archivo
 
 ### Paso 2: Organizar archivos
@@ -75,13 +73,12 @@ El programa crea dos carpetas automáticamente:
 
 **Parciales y Recuperatorios (múltiples archivos):**
 
-Si Moodle exportó el mismo parcial/recuperatorio en varios archivos, puedes usar sufijos numéricos:
+Si hubo varios turnos para un parcial o recuperatorio, se debe agregar un sufijo numérico de la siguiente forma:
 - `Parcial1_1K2_1.csv`, `Parcial1_1K2_2.csv`, `Parcial1_1K2_3.csv`
 - `Recuperatorio1_1K4_1.csv`, `Recuperatorio1_1K4_2.csv`
 
-> 💡 **Tip:** El código del curso (ej: `1K2`, `1K4`) debe estar al final del nombre base del archivo.
 
-> ✨ **¡El sistema es inteligente!** Si tienes múltiples archivos del mismo parcial (ej: `Parcial1_1K2_1.csv` y `Parcial1_1K2_2.csv`), el programa automáticamente los **consolida** tomando la mejor nota de cada alumno entre todos los archivos.
+> Si tienes múltiples archivos del mismo parcial (ej: `Parcial1_1K2_1.csv` y `Parcial1_1K2_2.csv`), el programa automáticamente los **consolida** tomando la mejor nota de cada alumno entre todos los archivos.
 
 ---
 
@@ -109,9 +106,6 @@ q) Salir
 **¿Qué hace?**  
 Si un alumno entregó varias veces el mismo TP, esta opción se queda solo con el intento de mejor nota.
 
-**Cuándo usar:**  
-Usa esto ANTES de hacer merge, para limpiar duplicados.
-
 **Pasos:**
 1. Selecciona opción `1`
 2. Elige el archivo CSV de la lista
@@ -122,9 +116,6 @@ Usa esto ANTES de hacer merge, para limpiar duplicados.
 **¿Qué hace?**  
 Junta todos los TPs de un curso en UN SOLO archivo.
 
-**Cuándo usar:**  
-Después de filtrar los archivos individuales.
-
 **Pasos:**
 1. Selecciona opción `2`
 2. Escribe el código del curso (ej: `1K2`)
@@ -132,8 +123,9 @@ Después de filtrar los archivos individuales.
 
 **📊 El archivo incluye:**
 - Apellido y Nombre del alumno
-- Nota de cada TP
-- **Cantidad de intentos** por TP (¡nuevo!)
+- Calificación de Moodle
+- Cantidad de intentos por TP
+- Calificación según la escala de la cátedra
 
 ### Opción 3: Mergear Parciales
 
@@ -152,9 +144,6 @@ Crea un archivo Excel (`.xls`) con **TODAS** las notas juntas:
 - Todos los TPs con sus intentos
 - Todos los Parciales
 - Todos los Recuperatorios
-
-**Cuándo usar:**  
-Al final, cuando ya procesaste todo.
 
 **Pasos:**
 1. Selecciona opción `4`
@@ -190,13 +179,10 @@ Cierra el programa.
 
 2. Ejecutar programa
 
-3. Seleccionar opción 1 → Filtrar cada archivo
-   (Repetir para TP1, TP2, TP3, TP4)
-
-4. Seleccionar opción 2 → Mergear TPs
+3. Seleccionar opción 2 → Mergear TPs
    → Escribir: 1K2
 
-5. ¡Listo! Resultado en:
+4. ¡Listo! Resultado en:
    outputs/1K2/TPs_1K2_mergeado.csv
 ```
 
@@ -210,15 +196,9 @@ Cierra el programa.
    📄 Parcial2_1K2.csv
    📄 Recuperatorio1_1K2.csv
 
-2. Filtrar todos los archivos (opción 1)
+2. Generar Planilla Final (opción 4) → Escribir: 1K2
 
-3. Mergear TPs (opción 2) → Escribir: 1K2
-
-4. Mergear Parciales (opción 3) → Escribir: 1K2
-
-5. Generar Planilla Final (opción 4) → Escribir: 1K2
-
-6. Abrir: outputs/1K2/Planilla_Final_1K2.xls
+3. Abrir: outputs/1K2/Planilla_Final_1K2.xls
 ```
 
 ---
@@ -228,9 +208,9 @@ Cierra el programa.
 ### ¿Por qué mis archivos no aparecen?
 
 **Verifica:**
-- ✅ Los archivos están en la carpeta `inputs/`
-- ✅ Los archivos terminan en `.csv`
-- ✅ El nombre incluye el código del curso (ej: `_1K2`)
+- ✅ Que los archivos de moodle están en la carpeta `inputs/`
+- ✅ Que los archivos terminan en `.csv`
+- ✅ Que el nombre incluye el código del curso (ej: `_1K2`)
 
 ### ¿Qué significa "filtrado"?
 
@@ -254,7 +234,6 @@ outputs/
 En el archivo mergeado de TPs, verás columnas como:
 - `TP1_Intentos` → Cantidad de veces que entregó el TP1
 - `TP2_Intentos` → Cantidad de veces que entregó el TP2
-- etc.
 
 ### ¿Qué pasa si un alumno no entregó un TP?
 
@@ -267,15 +246,6 @@ Aparecerá como "Falta" en la planilla.
 ### Tengo múltiples archivos del mismo parcial (ej: Parcial1_1K2_1.csv, Parcial1_1K2_2.csv)
 
 ¡No hay problema! El sistema los detecta automáticamente y los consolida.
-
-**Cómo funciona:**
-1. Nombra los archivos con sufijos numéricos: `Parcial1_1K2_1.csv`, `Parcial1_1K2_2.csv`, `Parcial1_1K2_3.csv`, etc.
-2. Colócalos todos en la carpeta `inputs/`
-3. El programa automáticamente:
-   - Detecta que son del mismo parcial
-   - Los consolida en un solo archivo
-   - Toma la **mejor nota** de cada alumno entre todos los archivos
-   - Genera `Parcial1_1K2_filtrado.csv` con el resultado
 
 **Ejemplo:**
 ```
@@ -294,15 +264,16 @@ Esto funciona tanto para **Parciales** como para **Recuperatorios**.
 
 El sistema convierte las notas de Moodle (escala 0-10 decimal) a la escala entera de calificación:
 
-| Nota Moodle | Nota Convertida |
-|-------------|-----------------|
-| 9.6 - 10.0  | 10             |
-| 8.6 - 9.5   | 9              |
-| 7.7 - 8.5   | 8              |
-| 6.8 - 7.6   | 7              |
-| 5.9 - 6.7   | 6              |
-| 5.7 - 5.8   | 4              |
-| < 5.7       | 2              |
+| Nota Moodle      | Nota Convertida |
+|------------------|-----------------|
+| 9.545 - 10.0     | 10             |
+| 8.645 - 9.544    | 9              |
+| 7.745 - 8.644    | 8              |
+| 6.845 - 7.744    | 7              |
+| 5.945 - 6.844    | 6              |
+| 5.745 - 5.944    | 5              |
+| 5.445 - 5.744    | 4              |
+| 0 - 5.444        | 2              |
 
 ---
 
@@ -366,7 +337,7 @@ cantidad_recuperatorios = 2
 
 ---
 
-## 📞 Soporte y Ayuda
+## Soporte y Ayuda
 
 ### Documentación Completa
 
@@ -451,69 +422,28 @@ pytest
 
 ### Construir Binarios
 
+**macOS:**
 ```bash
-# Instalar PyInstaller
-uv pip install pyinstaller
-
-# Construir
-./scripts/build-macos.sh
-
-# Binario en: dist/ACOCalculator
+./scripts/build-macos.sh  # → dist/ACOCalculator.app
 ```
 
-Ver [docs/BUILD.md](docs/BUILD.md) para más detalles.
+**Windows:**
+```cmd
+scripts\build-windows.bat  # → dist\ACOCalculator.exe
+```
 
-### Características Principales
+**Linux:**
+```bash
+./scripts/build-linux.sh  # → dist/ACOCalculator
+```
 
-#### 1. Seguimiento de Intentos en TPs
-- Nueva columna `TP{N}_Intentos` que registra cuántos intentos hizo cada alumno
-- Conteo automático desde archivos originales
-- Visible en planilla final
-
-#### 2. Sistema de Configuración Externa
-- Archivo `config.ini` en texto plano
-- Variables configurables: directorios, headers, cantidades, etc.
-- Sin necesidad de modificar código
-
-#### 3. Arquitectura Modular
-- **Utils**: Funciones auxiliares reutilizables
-- **Managers**: Lógica de negocio (TPManager, ParcialManager)
-- **Generators**: Generación de reportes (ReportGenerator)
-- **Main**: Solo orquestación y UI
-
-#### 4. Validación Robusta
-- Manejo de archivos vacíos
-- Detección de headers faltantes
-- Mensajes de error claros
-- El programa no crashea ante errores
-
-#### 5. Testing Completo
-- 52 tests unitarios e integración
-- 80% de cobertura de código
-- Factories con faker para datos realistas
-
-### Historial de Cambios
-
-Ver [docs/CHANGELOG.md](docs/CHANGELOG.md)
+Ver [docs/BUILD.md](docs/BUILD.md) para guía completa multi-plataforma.
 
 ### Licencia
 
 MIT License - Ver [LICENSE](LICENSE)
 
 </details>
-
----
-
-## ✨ Características Destacadas
-
-- ✅ **Interfaz amigable** - Menú simple y claro
-- ✅ **Automático** - Crea carpetas y archivos necesarios
-- ✅ **Organizado** - Separa resultados por curso
-- ✅ **Robusto** - Maneja errores sin crashear
-- ✅ **Flexible** - Configurable mediante `config.ini`
-- ✅ **Seguimiento de intentos** - Cuenta cuántas veces entregó cada alumno
-- ✅ **Multi-curso** - Procesa varios cursos a la vez
-- ✅ **Sin Python requerido** - Disponible como ejecutable standalone
 
 ---
 

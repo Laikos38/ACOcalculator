@@ -249,16 +249,14 @@ El sistema usa emojis para mensajes claros:
 
 3. **Probar manualmente** con datos de prueba
 
-4. **Documentar** en CHANGELOG.md
-
-5. **Commit y push:**
+4. **Commit y push:**
    ```bash
    git add .
    git commit -m "feat: descripción del cambio"
    git push origin feature/nombre-feature
    ```
 
-6. **Crear Pull Request** (si aplica)
+5. **Crear Pull Request** (si aplica)
 
 ## 📚 Recursos Adicionales
 

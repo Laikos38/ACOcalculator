@@ -36,26 +36,6 @@ Equivalente a: `uv run python main.py`
 
 ---
 
-### verify.sh
-**Verifica la instalación del sistema**
-
-```bash
-./scripts/verify.sh
-```
-
-Ejecuta el script de verificación que comprueba:
-- Versión de Python
-- Configuración correcta
-- Módulos instalados
-- Dependencias externas
-- Estructura de directorios
-
-Úsalo para:
-- Diagnosticar problemas de instalación
-- Verificar que todo está correcto después de setup
-
----
-
 ### test.sh
 **Ejecuta todos los tests**
 
@@ -108,6 +88,8 @@ Equivalente a: `uv run pytest --cov=src --cov-report=html`
 
 ---
 
+## 🏗️ Build Scripts
+
 ### build-macos.sh
 **Genera ejecutable standalone para macOS**
 
@@ -119,24 +101,78 @@ Genera binarios que no requieren Python instalado:
 - `dist/ACOCalculator` - Ejecutable CLI
 - `dist/ACOCalculator.app` - Bundle macOS
 
+**Requisitos:**
+- macOS 10.13+
+- UV instalado
+- 500 MB espacio libre
+
 Equivalente a: `uv run pyinstaller acocalculator.spec --clean`
 
 ---
 
+### build-windows.bat
+**Genera ejecutable standalone para Windows**
+
+```cmd
+scripts\build-windows.bat
+```
+
+Genera binario que no requiere Python instalado:
+- `dist\ACOCalculator.exe` - Ejecutable Windows
+
+**Requisitos:**
+- Windows 10+
+- UV instalado
+- 500 MB espacio libre
+
+Compatible con CMD, PowerShell y Git Bash.
+
+---
+
+### build-linux.sh
+**Genera ejecutable standalone para Linux**
+
+```bash
+chmod +x scripts/build-linux.sh
+./scripts/build-linux.sh
+```
+
+Genera binario que no requiere Python instalado:
+- `dist/ACOCalculator` - Ejecutable Linux
+
+**Requisitos:**
+- Linux (cualquier distribución)
+- UV instalado
+- 500 MB espacio libre
+
+**Nota:** El binario funciona solo en la misma arquitectura donde se compiló.
+
+---
+
 ### create-release.sh
-**Crea un paquete distribuible completo**
+**Crea paquetes distribuibles para todas las plataformas**
 
 ```bash
 ./scripts/create-release.sh
 ```
 
-Crea un ZIP listo para distribuir que incluye:
-- Ejecutables
-- Configuración
-- Documentación
-- Directorios necesarios
+Genera releases completos listos para distribuir:
 
-Salida: `release/ACOCalculator-v1.0.0-macos.zip`
+**Detecta automáticamente:**
+- macOS: `release/ACOCalculator-v1.0.0-macos.zip`
+- Windows: `release/ACOCalculator-v1.0.0-windows.zip`
+- Linux: `release/ACOCalculator-v1.0.0-linux-{arch}.tar.gz`
+
+**Cada release incluye:**
+- ✓ Binario ejecutable
+- ✓ config.ini (configuración editable)
+- ✓ README.md (manual completo)
+- ✓ LEEME.txt (inicio rápido por plataforma)
+- ✓ docs/ (documentación completa)
+- ✓ inputs/ y outputs/ (directorios vacíos)
+
+**Requisitos:**
+Debes haber construido los binarios primero con los scripts `build-*.sh`
 
 ---
 
@@ -151,10 +187,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # 2. Configurar proyecto
 ./scripts/setup.sh
 
-# 3. Verificar (opcional)
-./scripts/verify.sh
-
-# 4. Ejecutar
+# 3. Ejecutar
 ./scripts/run.sh
 ```
 

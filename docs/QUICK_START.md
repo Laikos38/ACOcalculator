@@ -24,17 +24,17 @@ uv run python main.py
 
 ### 1. Verificar Requisitos
 ```bash
-python3 --version  # Debe ser Python 3.6 o superior
+python3 --version  # Debe ser Python 3.8 o superior
 ```
 
 ### 2. Instalar Dependencias
 ```bash
-cd ACOCalculator
-pip install -r requirements.txt
+pip install xlwt
 ```
 
 ### 3. Ejecutar el Programa
 ```bash
+cd ACOCalculator
 python3 main.py
 ```
 
@@ -169,7 +169,6 @@ pip install xlwt
 ## 📚 Más Información
 
 - **README.md**: Documentación completa
-- **CHANGELOG.md**: Historial de cambios
 - **CONTRIBUTING.md**: Guía para desarrolladores
 
 ## 💡 Tip Pro

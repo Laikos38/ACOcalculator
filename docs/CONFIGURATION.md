@@ -250,55 +250,6 @@ config = ConfigLoader("mi_config.ini")
 | `csv_encoding` | `utf-8-sig` | Encoding para leer/escribir CSVs |
 | `output_format` | `xls` | Formato de salida (xls) |
 
-## 🎯 Casos de Uso
-
-### Caso 1: Usar el Binario Sin Configuración
-
-**Escenario**: Usuario final que solo quiere ejecutar el programa.
-
-```bash
-# Copiar solo el binario
-cp dist/ACOCalculator ~/Desktop/
-
-# Ejecutar
-cd ~/Desktop
-./ACOCalculator
-
-# ✅ Funciona inmediatamente
-# ✅ Crea config.ini automáticamente
-# ✅ Usuario puede editarlo si quiere personalizar
-```
-
-### Caso 2: Distribuir con Configuración Predeterminada
-
-**Escenario**: Distribuir con config.ini personalizado incluido.
-
-```bash
-# Editar config.ini con valores específicos
-nano config.ini
-
-# Crear release con config incluido
-./scripts/create-release.sh
-
-# El ZIP incluye config.ini personalizado
-# Los usuarios usan esa configuración por defecto
-```
-
-### Caso 3: Múltiples Configuraciones
-
-**Escenario**: Usar diferentes configuraciones según la materia.
-
-```bash
-# Estructura:
-proyecto/
-├── ACOCalculator
-├── config_matematica.ini
-├── config_fisica.ini
-└── config_quimica.ini
-
-# Usar configuración específica
-./ACOCalculator config_matematica.ini
-```
 
 ## 🔍 Debugging de Configuración
 
@@ -339,12 +290,6 @@ rm config.ini
 
 ## ⚠️ Notas Importantes
 
-### Compatibilidad con Versiones Anteriores
-
-- ✅ **Compatible**: El programa sigue buscando `config.ini` primero
-- ✅ **Nuevo**: Si no existe, usa configuración embebida
-- ✅ **Sin cambios**: Si ya tenías `config.ini`, funciona igual que antes
-
 ### En Binarios
 
 - ✅ El binario **NO requiere** `config.ini` externo
@@ -374,6 +319,3 @@ El programa busca `config.ini` en:
 3. **config.ini tiene prioridad** - sobrescribe defaults
 4. **Configuración parcial funciona** - solo define lo que cambias
 5. **Binario standalone** - no requiere config.ini externo
-
-**¡Simplemente ejecuta y listo!** 🎉
-

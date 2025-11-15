@@ -84,14 +84,6 @@ python main.py
 deactivate
 ```
 
-### Verificar Instalación
-
-```bash
-./scripts/verify.sh
-# o
-uv run python verify_installation.py
-```
-
 ## Gestión de Dependencias
 
 ### Ver dependencias instaladas
@@ -279,10 +271,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # 3. Configurar proyecto
 ./scripts/setup.sh
 
-# 4. Verificar instalación
-./scripts/verify.sh
-
-# 5. ¡Listo para usar!
+# 4. ¡Listo para usar!
 ./scripts/run.sh
 ```
 

@@ -1,12 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 """
 Archivo de configuración de PyInstaller para ACOCalculator.
-Genera un ejecutable standalone para macOS.
+Genera ejecutables standalone para Windows, macOS y Linux.
 """
 
 block_cipher = None
 
 import os
+import sys
 
 # Incluir config.ini solo si existe (opcional)
 datas_list = [('src', 'src')]  # Siempre incluir el paquete src
@@ -60,23 +61,24 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,  # Puedes agregar un icono .icns aquí
+    icon=None,  # Windows: icon.ico, macOS: icon.icns
 )
 
-# Para macOS, crear bundle .app (opcional)
-app = BUNDLE(
-    exe,
-    name='ACOCalculator.app',
-    icon=None,
-    bundle_identifier='com.acocalculator.app',
-    info_plist={
-        'CFBundleName': 'ACOCalculator',
-        'CFBundleDisplayName': 'ACO Calculator',
-        'CFBundleGetInfoString': 'Sistema de Gestión de Calificaciones de Moodle',
-        'CFBundleVersion': '1.0.0',
-        'CFBundleShortVersionString': '1.0.0',
-        'NSHumanReadableCopyright': 'Copyright © 2025',
-        'NSHighResolutionCapable': True,
-    },
-)
+# Para macOS, crear bundle .app (solo se genera en macOS)
+if sys.platform == 'darwin':
+    app = BUNDLE(
+        exe,
+        name='ACOCalculator.app',
+        icon=None,
+        bundle_identifier='com.acocalculator.app',
+        info_plist={
+            'CFBundleName': 'ACOCalculator',
+            'CFBundleDisplayName': 'ACO Calculator',
+            'CFBundleGetInfoString': 'Sistema de Gestión de Calificaciones de Moodle',
+            'CFBundleVersion': '1.0.0',
+            'CFBundleShortVersionString': '1.0.0',
+            'NSHumanReadableCopyright': 'Copyright © 2025',
+            'NSHighResolutionCapable': True,
+        },
+    )
 
