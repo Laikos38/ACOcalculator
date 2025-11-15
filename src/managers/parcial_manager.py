@@ -43,24 +43,28 @@ class ParcialManager:
     def merge_exams(self, course: str):
         """
         Fusiona todos los Parciales y Recuperatorios de un curso en un único archivo CSV.
+        Soporta nombres de curso case-insensitive (ej: "1k2", "1K2").
         
         Args:
             course: Código del curso (ej: "1K2", "1K4")
         """
+        # Normalizar curso a mayúsculas para consistencia
+        course = course.upper()
+        
         files = {}
         
         # Agregar parciales
         for i in range(1, self.exam_count + 1):
-            files[f"{self.exam_prefix}{i}"] = f"{self.exam_prefix}{i}_{course.upper()}"
+            files[f"{self.exam_prefix}{i}"] = f"{self.exam_prefix}{i}_{course}"
         
         # Agregar recuperatorios
         for i in range(1, self.makeup_count + 1):
-            files[f"{self.makeup_prefix}{i}"] = f"{self.makeup_prefix}{i}_{course.upper()}"
+            files[f"{self.makeup_prefix}{i}"] = f"{self.makeup_prefix}{i}_{course}"
         
         data = {}
         
-        # Directorio de salida específico del curso
-        output_course_dir = os.path.join(self.output_dir, course.upper())
+        # Directorio de salida específico del curso (ya normalizado)
+        output_course_dir = os.path.join(self.output_dir, course)
         
         for evaluation, base_name in files.items():
             filtered_file = os.path.join(output_course_dir, base_name + "_filtrado.csv")
@@ -109,7 +113,7 @@ class ParcialManager:
             return
         
         os.makedirs(output_course_dir, exist_ok=True)
-        merge_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course.upper()}_mergeado.csv")
+        merge_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_mergeado.csv")
         
         # Construir fieldnames dinámicamente
         fieldnames = ["Apellido(s)", "Nombre", "Número de ID"]
@@ -161,7 +165,25 @@ class ParcialManager:
             output_course_dir = self.output_dir
         
         os.makedirs(output_course_dir, exist_ok=True)
-        output_path = os.path.join(output_course_dir, file_name.replace(".csv", "_filtrado.csv"))
+        
+        # Normalizar nombre del archivo de salida (mayúsculas para consistencia)
+        output_filename = file_name.replace(".csv", "_filtrado.csv")
+        # Extraer las partes del nombre y normalizar el prefijo y curso
+        name_parts = output_filename.split("_")
+        if len(name_parts) >= 2:
+            # Normalizar cada parte (mantener el número, pero capitalizar el resto)
+            normalized_parts = []
+            for part in name_parts:
+                if part.lower() == "filtrado.csv":
+                    normalized_parts.append("filtrado.csv")
+                elif part.isdigit():
+                    normalized_parts.append(part)
+                else:
+                    # Normalizar prefijo/curso a mayúsculas
+                    normalized_parts.append(part.upper())
+            output_filename = "_".join(normalized_parts)
+        
+        output_path = os.path.join(output_course_dir, output_filename)
         
         try:
             self.consolidator._filter_best_grade(input_path, output_path)

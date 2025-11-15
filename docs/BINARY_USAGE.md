@@ -82,6 +82,7 @@ directorio_del_binario/
 ✅ **inputs/** - Se crea automáticamente al iniciar
 - Coloca aquí tus archivos CSV de Moodle
 - Formatos esperados: `TP1_1K2.csv`, `Parcial1_1K4.csv`, etc.
+- ✨ **Case-insensitive**: También acepta `tp1_1k2.csv`, `parcial1_1k4.csv`, etc.
 
 ✅ **outputs/** - Se crea automáticamente al iniciar
 - Aquí se guardan todos los resultados procesados
@@ -120,6 +121,25 @@ cp ~/Downloads/TP1_1K2.csv inputs/
 cp ~/Downloads/TP2_1K2.csv inputs/
 cp ~/Downloads/Parcial1_1K2.csv inputs/
 ```
+
+**✨ Flexibilidad en Nomenclatura:**
+
+El sistema acepta **cualquier combinación de mayúsculas y minúsculas**:
+
+```
+✅ Todos estos archivos son VÁLIDOS y se procesan igual:
+
+   TP1_1K15.csv          tp1_1k15.csv
+   Tp1_1K15.csv          TP1_1k15.csv
+   
+   Parcial1_1K2.csv      parcial1_1k2.csv
+   PARCIAL1_1K2.csv      Parcial1_1k2.csv
+   
+   Recuperatorio1_1K4.csv   recuperatorio1_1k4.csv
+   RECUPERATORIO1_1K4.csv   Recuperatorio1_1K4_1.csv
+```
+
+> **Nota:** Los archivos de salida se normalizan automáticamente a mayúsculas para mantener consistencia (ej: `TP1_1K15_filtrado.csv`).
 
 ### 3. Procesar Datos
 

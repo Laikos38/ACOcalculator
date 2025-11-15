@@ -33,12 +33,12 @@ def get_col_name(fieldnames: List[str], possible_names: List[str]) -> str:
     raise KeyError(f"No se encontró ninguna de las columnas {possible_names} en {fieldnames}")
 
 
-def convert_grade_to_integer(grade_str: str) -> any:
+def convert_grade_to_integer(grade_str: str, scale_max: float = 10.0) -> any:
     """
     Convierte una nota decimal a su equivalente entero según la escala de calificación.
     
-    Las notas de Moodle vienen en escala 0-10, se multiplican por 10 para llevarlas
-    a escala 0-100 y luego se aplica la conversión a escala entera (2-10).
+    Las notas de Moodle pueden venir en escala 0-10 o 0-100. Esta función las normaliza
+    a escala 0-100 y luego aplica la conversión a escala entera (2-10).
     
     Escala de conversión (base 100):
     - 0 a 54.44 -> 2
@@ -53,6 +53,7 @@ def convert_grade_to_integer(grade_str: str) -> any:
     
     Args:
         grade_str: Nota en formato string
+        scale_max: Escala máxima (10.0 para escala 0-10, 100.0 para escala 0-100)
         
     Returns:
         Nota convertida a entero (2-10) o "FALTA"
@@ -65,8 +66,11 @@ def convert_grade_to_integer(grade_str: str) -> any:
     except ValueError:
         return "FALTA"
     
-    # Convertir de escala 0-10 a escala 0-100
-    grade_100 = grade * 10
+    # Normalizar a escala 0-100 según la escala de origen
+    if scale_max == 100.0:
+        grade_100 = grade  # Ya está en escala 0-100
+    else:
+        grade_100 = grade * 10  # Convertir de escala 0-10 a escala 0-100
     
     if 0 <= grade_100 <= 54.44:
         return 2
@@ -88,9 +92,43 @@ def convert_grade_to_integer(grade_str: str) -> any:
         return "FALTA"
 
 
+def detect_grade_scale(grade_col_name: str) -> float:
+    """
+    Detecta la escala de calificación basándose en el nombre de la columna.
+    
+    Args:
+        grade_col_name: Nombre de la columna de calificación
+        
+    Returns:
+        Escala máxima (10.0 o 100.0)
+    """
+    if "/100" in grade_col_name or "/100," in grade_col_name or "/100." in grade_col_name:
+        return 100.0
+    else:
+        return 10.0
+
+
+def normalize_grade_to_scale_10(grade: float, scale_max: float) -> float:
+    """
+    Normaliza una calificación a escala 0-10.
+    
+    Args:
+        grade: Calificación a normalizar
+        scale_max: Escala máxima (10.0 o 100.0)
+        
+    Returns:
+        Calificación normalizada en escala 0-10
+    """
+    if scale_max == 100.0:
+        return grade / 10.0  # Convertir de escala 0-100 a escala 0-10
+    else:
+        return grade  # Ya está en escala 0-10
+
+
 def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 'utf-8-sig') -> Dict:
     """
     Lee un archivo CSV y retorna un diccionario con las mejores notas por alumno.
+    Detecta automáticamente la escala de calificación (0-10 o 0-100) y normaliza.
     
     Args:
         file_path: Ruta al archivo CSV
@@ -107,16 +145,30 @@ def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 
         id_col = get_col_name(reader.fieldnames, header_map["id"])
         grade_col = get_col_name(reader.fieldnames, header_map["nota"])
         
+        # Detectar escala de calificación
+        scale_max = detect_grade_scale(grade_col)
+        
         for row in reader:
             student_id = row[id_col]
             grade = float(row[grade_col].replace(",", "."))
             
+            # Normalizar calificación a escala 0-10 para comparación consistente
+            normalized_grade = normalize_grade_to_scale_10(grade, scale_max)
+            
             if student_id not in best_attempts:
-                best_attempts[student_id] = row
+                # Guardar el registro pero con la nota normalizada a escala 0-10
+                normalized_row = row.copy()
+                normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                best_attempts[student_id] = normalized_row
             else:
-                current_grade = float(best_attempts[student_id][grade_col].replace(",", "."))
-                if grade > current_grade:
-                    best_attempts[student_id] = row
+                current_grade_str = best_attempts[student_id][grade_col].replace(",", ".")
+                current_grade = float(current_grade_str)
+                
+                if normalized_grade > current_grade:
+                    # Actualizar con la nota normalizada a escala 0-10
+                    normalized_row = row.copy()
+                    normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                    best_attempts[student_id] = normalized_row
     
     return best_attempts
 

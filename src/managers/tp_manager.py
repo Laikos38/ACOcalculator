@@ -13,6 +13,7 @@ from ..utils import (
     count_student_attempts,
     save_csv
 )
+from ..utils.file_consolidator import find_files_case_insensitive
 
 
 class TPManager:
@@ -44,19 +45,23 @@ class TPManager:
         """
         Fusiona todos los TPs de un curso en un único archivo CSV.
         Incluye columnas con la cantidad de intentos por alumno para cada TP.
+        Soporta nombres de curso case-insensitive (ej: "1k2", "1K2").
         
         Args:
             course: Código del curso (ej: "1K2", "1K4")
         """
+        # Normalizar curso a mayúsculas para consistencia
+        course = course.upper()
+        
         files = {}
         for i in range(1, self.tp_count + 1):
-            files[f"{self.tp_prefix}{i}"] = f"{self.tp_prefix}{i}_{course.upper()}"
+            files[f"{self.tp_prefix}{i}"] = f"{self.tp_prefix}{i}_{course}"
         
         data = {}
         attempts_data = {}  # Diccionario para almacenar intentos por TP
         
-        # Directorio de salida específico del curso
-        output_course_dir = os.path.join(self.output_dir, course.upper())
+        # Directorio de salida específico del curso (ya normalizado)
+        output_course_dir = os.path.join(self.output_dir, course)
         
         for tp, base_name in files.items():
             filtered_file = os.path.join(output_course_dir, base_name + "_filtrado.csv")
@@ -108,7 +113,7 @@ class TPManager:
             return
         
         os.makedirs(output_course_dir, exist_ok=True)
-        merge_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course.upper()}_mergeado.csv")
+        merge_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_mergeado.csv")
         
         # Construir fieldnames dinámicamente
         fieldnames = ["Apellido(s)", "Nombre", "Número de ID"]
@@ -126,6 +131,7 @@ class TPManager:
     def _count_original_file_attempts(self, base_name: str, course: str) -> Dict[str, int]:
         """
         Cuenta los intentos de cada alumno en todos los archivos originales de un TP.
+        Soporta búsqueda case-insensitive tanto para prefijos como para el curso.
         
         Args:
             base_name: Nombre base del TP (ej: "TP1_1K2")
@@ -134,14 +140,8 @@ class TPManager:
         Returns:
             Diccionario con ID de alumno como clave y cantidad de intentos como valor
         """
-        # Buscar todos los archivos que coincidan con el patrón
-        pattern = os.path.join(self.source_dir, f"{base_name}_*.csv")
-        found_files = glob.glob(pattern)
-        
-        # También buscar el archivo sin sufijo numérico
-        base_file = os.path.join(self.source_dir, f"{base_name}.csv")
-        if os.path.exists(base_file):
-            found_files.append(base_file)
+        # Buscar archivos usando búsqueda case-insensitive
+        found_files = find_files_case_insensitive(self.source_dir, base_name)
         
         # Contador acumulado de intentos
         total_attempts = {}
@@ -186,7 +186,25 @@ class TPManager:
             output_course_dir = self.output_dir
         
         os.makedirs(output_course_dir, exist_ok=True)
-        output_path = os.path.join(output_course_dir, file_name.replace(".csv", "_filtrado.csv"))
+        
+        # Normalizar nombre del archivo de salida (mayúsculas para consistencia)
+        output_filename = file_name.replace(".csv", "_filtrado.csv")
+        # Extraer las partes del nombre y normalizar el prefijo y curso
+        name_parts = output_filename.split("_")
+        if len(name_parts) >= 2:
+            # Normalizar cada parte (mantener el número, pero capitalizar el resto)
+            normalized_parts = []
+            for part in name_parts:
+                if part.lower() == "filtrado.csv":
+                    normalized_parts.append("filtrado.csv")
+                elif part.isdigit():
+                    normalized_parts.append(part)
+                else:
+                    # Normalizar prefijo/curso a mayúsculas
+                    normalized_parts.append(part.upper())
+            output_filename = "_".join(normalized_parts)
+        
+        output_path = os.path.join(output_course_dir, output_filename)
         
         try:
             self.consolidator._filter_best_grade(input_path, output_path)

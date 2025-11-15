@@ -63,6 +63,27 @@ ACOCalculator/
 **Recuperatorios:**
 - `Recuperatorio1_1K2.csv`, `Recuperatorio2_1K2.csv`, etc.
 
+**✨ Flexibilidad Case-Insensitive:**
+
+El sistema acepta **cualquier combinación de mayúsculas y minúsculas**:
+
+```
+✅ VÁLIDOS (todos funcionan igual):
+   • TP1_1K15.csv
+   • tp1_1k15.csv
+   • Tp1_1K15.csv
+   • TP1_1k15.csv
+   
+   • Parcial1_1K2.csv
+   • parcial1_1k2.csv
+   • PARCIAL1_1K2.csv
+   
+   • Recuperatorio1_1K4.csv
+   • recuperatorio1_1k4.csv
+```
+
+> **Nota:** Los archivos de salida siempre se normalizan a mayúsculas para mantener consistencia (ej: `TP1_1K15_filtrado.csv`).
+
 ## 🎯 Flujo de Trabajo Típico
 
 ### Para Generar Planilla Final del Curso 1K2:

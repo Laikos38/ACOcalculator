@@ -106,7 +106,7 @@ def menu():
         print(" SISTEMA DE GESTIÓN DE CALIFICACIONES - MOODLE")
         print("="*60)
         print("1) Filtrar mejor calificación por alumno")
-        print("2) Mergear TPs (incluye seguimiento de intentos)")
+        print("2) Mergear TPs")
         print("3) Mergear Parciales y Recuperatorios")
         print("4) Generar Planilla Final (XLS)")
         print("h) Ayuda - Abrir manual de usuario")
@@ -189,7 +189,7 @@ def menu():
         
         elif option.lower() == "q":
             print("\n" + "="*60)
-            print("👋 Gracias por usar el Sistema de Gestión de Calificaciones")
+            print("👋")
             print("="*60)
             break
         else:
@@ -201,8 +201,8 @@ def main():
     Función principal del programa.
     """
     print("\n" + "="*60)
-    print(" BIENVENIDO AL SISTEMA DE GESTIÓN DE CALIFICACIONES")
-    print(" Versión 1.0 - Modular y Profesional")
+    print(" ACOCalculator")
+    print(" Versión 1.0")
     print("="*60)
     print("")
     

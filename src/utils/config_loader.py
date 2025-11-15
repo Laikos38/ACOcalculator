@@ -75,12 +75,13 @@ output_format = xls
         return self.config.get('Headers', 'calification_header', fallback='Calificación/10,00')
     
     def get_header_map(self):
-        """Retorna el mapeo de encabezados."""
+        """Retorna el mapeo de encabezados con soporte para múltiples formatos de calificación."""
         return {
             "apellido": [s.strip() for s in self.config.get('Headers', 'header_apellido').split(',')],
             "nombre": [s.strip() for s in self.config.get('Headers', 'header_nombre').split(',')],
             "id": [s.strip() for s in self.config.get('Headers', 'header_id').split(',')],
-            "nota": [self.get_calification_header()],
+            # Soportar múltiples formatos de calificación (escala 0-10 y 0-100)
+            "nota": ["Calificación/10,00", "Calificación/100,00", "Calificación/10.00", "Calificación/100.00"],
         }
     
     def get_cantidad_tps(self):

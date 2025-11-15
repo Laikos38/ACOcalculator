@@ -4,8 +4,54 @@ Módulo para consolidar múltiples archivos de un mismo TP o Parcial.
 import glob
 import os
 import csv
-from typing import Dict, Optional
-from .csv_helpers import get_col_name, save_csv, read_csv_with_best_grades
+from typing import Dict, List
+from .csv_helpers import get_col_name, save_csv, read_csv_with_best_grades, detect_grade_scale, normalize_grade_to_scale_10
+
+
+def find_files_case_insensitive(directory: str, base_pattern: str) -> List[str]:
+    """
+    Busca archivos en un directorio usando un patrón case-insensitive.
+    
+    Por ejemplo, si base_pattern es "TP1_1K15", encontrará:
+    - TP1_1K15.csv
+    - tp1_1k15.csv
+    - Tp1_1K15_1.csv
+    - etc.
+    
+    Args:
+        directory: Directorio donde buscar
+        base_pattern: Patrón base (ej: "TP1_1K15", "Parcial2_1K2")
+        
+    Returns:
+        Lista de rutas completas a archivos que coinciden
+    """
+    if not os.path.exists(directory):
+        return []
+    
+    # Obtener todos los archivos CSV del directorio
+    all_files = [f for f in os.listdir(directory) if f.lower().endswith('.csv')]
+    
+    # Normalizar el patrón base a minúsculas para comparación
+    base_pattern_lower = base_pattern.lower()
+    
+    matched_files = []
+    
+    for filename in all_files:
+        filename_lower = filename[:-4].lower()  # Remover .csv y convertir a minúsculas
+        
+        # Verificar si el nombre del archivo coincide con el patrón base
+        # Puede ser exacto o con sufijo numérico (_1, _2, etc.)
+        if filename_lower == base_pattern_lower:
+            # Coincidencia exacta (ej: TP1_1K15.csv)
+            matched_files.append(os.path.join(directory, filename))
+        elif filename_lower.startswith(base_pattern_lower + "_"):
+            # Coincidencia con sufijo (ej: TP1_1K15_1.csv, TP1_1K15_2.csv)
+            # Verificar que lo que sigue sea un número
+            suffix = filename_lower[len(base_pattern_lower) + 1:]
+            if suffix.isdigit():
+                matched_files.append(os.path.join(directory, filename))
+    
+    return matched_files
 
 
 class FileConsolidator:
@@ -29,10 +75,11 @@ class FileConsolidator:
     def consolidate_multiple_files(self, base_name: str, course: str) -> bool:
         """
         Busca y consolida múltiples archivos de un mismo TP o Parcial.
+        Soporta búsqueda case-insensitive tanto para prefijos (TP, Parcial, etc.) como para el curso.
         
-        Por ejemplo, si hay Parcial1_1K2_1.csv y Parcial1_1K2_2.csv,
-        los consolida en un solo archivo Parcial1_1K2_filtrado.csv tomando
-        la mejor calificación de cada alumno entre todos los archivos.
+        Por ejemplo, encontrará:
+        - Parcial1_1K2.csv, parcial1_1k2.csv, PARCIAL1_1K2.csv
+        - TP1_1K15.csv, tp1_1k15.csv, Tp1_1K15.csv
         
         Args:
             base_name: Nombre base sin extensión (ej: "Parcial1_1K2", "TP1_1K4")
@@ -41,22 +88,16 @@ class FileConsolidator:
         Returns:
             bool: True si se encontraron y consolidaron archivos, False si no
         """
-        # Buscar todos los archivos que coincidan con el patrón
-        pattern = os.path.join(self.source_dir, f"{base_name}_*.csv")
-        found_files = glob.glob(pattern)
-        
-        # También buscar el archivo sin sufijo numérico
-        base_file = os.path.join(self.source_dir, f"{base_name}.csv")
-        if os.path.exists(base_file):
-            found_files.append(base_file)
+        # Buscar archivos usando búsqueda case-insensitive
+        found_files = find_files_case_insensitive(self.source_dir, base_name)
         
         if not found_files:
             return False
         
-        # Extraer el curso del base_name y crear el directorio de salida
+        # Extraer el curso del base_name y crear el directorio de salida (case-insensitive)
         parts = base_name.split("_")
         if len(parts) >= 2:
-            course_dir = parts[-1]  # Último elemento es el curso
+            course_dir = parts[-1].upper()  # Último elemento es el curso, normalizar a mayúsculas
             output_course_dir = os.path.join(self.output_dir, course_dir)
         else:
             output_course_dir = self.output_dir
@@ -90,16 +131,30 @@ class FileConsolidator:
                 id_col = get_col_name(reader.fieldnames, self.header_map["id"])
                 grade_col = get_col_name(reader.fieldnames, self.header_map["nota"])
                 
+                # Detectar escala de calificación
+                scale_max = detect_grade_scale(grade_col)
+                
                 for row in reader:
                     student_id = row[id_col]
                     grade = float(row[grade_col].replace(",", "."))
                     
+                    # Normalizar calificación a escala 0-10
+                    normalized_grade = normalize_grade_to_scale_10(grade, scale_max)
+                    
                     if student_id not in best_attempts:
-                        best_attempts[student_id] = row
+                        # Guardar con nota normalizada
+                        normalized_row = row.copy()
+                        normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                        best_attempts[student_id] = normalized_row
                     else:
-                        current_grade = float(best_attempts[student_id][grade_col].replace(",", "."))
-                        if grade > current_grade:
-                            best_attempts[student_id] = row
+                        current_grade_str = best_attempts[student_id][grade_col].replace(",", ".")
+                        current_grade = float(current_grade_str)
+                        
+                        if normalized_grade > current_grade:
+                            # Actualizar con nota normalizada
+                            normalized_row = row.copy()
+                            normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                            best_attempts[student_id] = normalized_row
         
         # Guardar el archivo consolidado
         save_csv(output_file, fieldnames, list(best_attempts.values()), self.encoding)

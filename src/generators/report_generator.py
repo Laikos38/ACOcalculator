@@ -45,60 +45,84 @@ class ReportGenerator:
             print("   Instálala con: pip install xlwt")
             return
         
-        # Directorio de salida específico del curso
-        output_course_dir = os.path.join(self.output_dir, course.upper())
+        # Directorio de salida específico del curso (normalizar a mayúsculas)
+        course = course.upper()
+        output_course_dir = os.path.join(self.output_dir, course)
         
         # Archivos mergeados de TPs y Parciales
-        tps_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course.upper()}_mergeado.csv")
-        exams_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course.upper()}_mergeado.csv")
+        tps_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_mergeado.csv")
+        exams_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_mergeado.csv")
         
-        # Verificar que existan los archivos mergeados
+        # Variables para controlar qué datos están disponibles
+        tps_data = {}
+        exams_data = {}
+        has_tps = False
+        has_exams = False
+        
+        # Intentar obtener datos de TPs
         if not os.path.exists(tps_file):
             print(f"⚠️ No se encontró el archivo de TPs mergeado: {tps_file}")
-            print(f"   Ejecuta primero la opción 2 (Mergear TPs) para el curso {course.upper()}")
             if tp_manager:
                 generate = input("¿Quieres generar el merge de TPs ahora? (S/n) [S]: ").strip().lower()
                 if generate == '' or generate == 's':
                     tp_manager.merge_tps(course)
-                    if not os.path.exists(tps_file):
-                        print("❌ No se pudo generar el merge de TPs. Abortando.")
-                        return
+                    if os.path.exists(tps_file):
+                        tps_data = self._read_csv_as_dict(tps_file)
+                        has_tps = True
+                    else:
+                        print("⚠️ No hay datos de TPs disponibles. Continuando sin TPs...")
                 else:
-                    return
+                    print("⚠️ Continuando sin datos de TPs...")
             else:
-                return
+                print("⚠️ Continuando sin datos de TPs...")
+        else:
+            tps_data = self._read_csv_as_dict(tps_file)
+            has_tps = True
         
+        # Intentar obtener datos de Parciales
         if not os.path.exists(exams_file):
             print(f"⚠️ No se encontró el archivo de Parciales mergeado: {exams_file}")
-            print(f"   Ejecuta primero la opción 3 (Mergear Parciales) para el curso {course.upper()}")
             if exam_manager:
                 generate = input("¿Quieres generar el merge de Parciales ahora? (S/n) [S]: ").strip().lower()
                 if generate == '' or generate == 's':
                     exam_manager.merge_exams(course)
-                    if not os.path.exists(exams_file):
-                        print("❌ No se pudo generar el merge de Parciales. Abortando.")
-                        return
+                    if os.path.exists(exams_file):
+                        exams_data = self._read_csv_as_dict(exams_file)
+                        has_exams = True
+                    else:
+                        print("⚠️ No hay datos de Parciales disponibles. Continuando sin Parciales...")
                 else:
-                    return
+                    print("⚠️ Continuando sin datos de Parciales...")
             else:
-                return
-        
-        # Leer datos de TPs
-        tps_data = self._read_csv_as_dict(tps_file)
-        
-        # Leer datos de Parciales
-        exams_data = self._read_csv_as_dict(exams_file)
+                print("⚠️ Continuando sin datos de Parciales...")
+        else:
+            exams_data = self._read_csv_as_dict(exams_file)
+            has_exams = True
         
         # Combinar todos los IDs únicos
         all_ids = set(tps_data.keys()) | set(exams_data.keys())
         
         if not all_ids:
-            print("⚠️ No hay datos para generar la planilla final.")
+            print("⚠️ No hay datos de alumnos para generar la planilla final.")
+            print("   Asegúrate de tener al menos un archivo de TP o Parcial con datos.")
             return
+        
+        # Informar al usuario sobre qué datos se incluirán
+        print("")
+        print(f"📊 Generando planilla final con:")
+        if has_tps:
+            print(f"   ✅ {len(tps_data)} alumnos con datos de TPs")
+        else:
+            print(f"   ⚠️  Sin datos de TPs (columnas estarán vacías)")
+        if has_exams:
+            print(f"   ✅ {len(exams_data)} alumnos con datos de Parciales")
+        else:
+            print(f"   ⚠️  Sin datos de Parciales (columnas estarán vacías)")
+        print("")
         
         # Crear libro de Excel
         wb = xlwt.Workbook()
-        ws = wb.add_sheet(f'Notas {course.upper()}')
+        ws = wb.add_sheet(f'Notas {course}')
         
         # Estilo para el encabezado
         header_style = xlwt.easyxf('font: bold on; align: horiz center')
@@ -180,11 +204,13 @@ class ReportGenerator:
         
         # Guardar archivo
         os.makedirs(output_course_dir, exist_ok=True)
-        output_file = os.path.join(output_course_dir, f"Planilla_Final_{course.upper()}.{self.output_format}")
+        output_file = os.path.join(output_course_dir, f"Planilla_Final_{course}.{self.output_format}")
         wb.save(output_file)
         
         print(f"✅ Planilla final generada: {output_file}")
         print(f"   Total de alumnos: {len(all_ids)}")
+        print(f"   Columnas de TPs: {'Incluidas' if has_tps else 'Vacías'}")
+        print(f"   Columnas de Parciales: {'Incluidas' if has_exams else 'Vacías'}")
     
     def _read_csv_as_dict(self, file_path: str) -> Dict[str, Dict]:
         """

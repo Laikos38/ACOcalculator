@@ -77,6 +77,14 @@ Si hubo varios turnos para un parcial o recuperatorio, se debe agregar un sufijo
 - `Parcial1_1K2_1.csv`, `Parcial1_1K2_2.csv`, `Parcial1_1K2_3.csv`
 - `Recuperatorio1_1K4_1.csv`, `Recuperatorio1_1K4_2.csv`
 
+> **✨ FLEXIBILIDAD EN NOMENCLATURA:** El sistema acepta **mayúsculas y minúsculas** indistintamente. Todos estos formatos son válidos:
+> - ✅ `TP1_1K15.csv` (mayúsculas)
+> - ✅ `tp1_1k15.csv` (minúsculas)
+> - ✅ `Tp1_1K15.csv` (capitalizado)
+> - ✅ `parcial1_1k2.csv` (minúsculas)
+> - ✅ `RECUPERATORIO1_1K4.csv` (mayúsculas)
+>
+> El sistema **automáticamente detecta y normaliza** todos estos formatos, garantizando consistencia en los archivos de salida.
 
 > Si tienes múltiples archivos del mismo parcial (ej: `Parcial1_1K2_1.csv` y `Parcial1_1K2_2.csv`), el programa automáticamente los **consolida** tomando la mejor nota de cada alumno entre todos los archivos.
 
@@ -257,6 +265,25 @@ inputs/
 Resultado en outputs/1K2/Parcial1_1K2_filtrado.csv:
 → Alumno García: 8.0
 ```
+
+### ¿Los nombres de archivo son case-sensitive?
+
+**NO.** El sistema acepta mayúsculas y minúsculas indistintamente:
+
+```
+✅ Estos archivos se procesan exactamente igual:
+   • TP1_1K15.csv
+   • tp1_1k15.csv  
+   • Tp1_1K15.csv
+   • TP1_1k15.csv
+
+✅ También para parciales:
+   • Parcial1_1K2.csv
+   • parcial1_1k2.csv
+   • PARCIAL1_1K2.csv
+```
+
+Los archivos de salida siempre se normalizan para consistencia.
 
 Esto funciona tanto para **Parciales** como para **Recuperatorios**.
 
