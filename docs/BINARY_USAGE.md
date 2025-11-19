@@ -51,10 +51,9 @@ ACOCalculator.exe
 ============================================================
  SISTEMA DE GESTIÓN DE CALIFICACIONES - MOODLE
 ============================================================
-1) Filtrar mejor calificación por alumno
-2) Mergear TPs (incluye seguimiento de intentos)
-3) Mergear Parciales y Recuperatorios
-4) Generar Planilla Final (XLS)
+1) Generar planilla de notas (XLS)
+2) Operaciones intermedias
+h) Ayuda - Abrir manual de usuario
 q) Salir
 ============================================================
 ```
@@ -146,10 +145,11 @@ El sistema acepta **cualquier combinación de mayúsculas y minúsculas**:
 ```bash
 ./ACOCalculator
 
-# Opción 1: Filtrar cada archivo individualmente
-# Opción 2: Mergear TPs para un curso
-# Opción 3: Mergear Parciales para un curso
-# Opción 4: Generar planilla final
+# Opción 1: Generar planilla final (recomendado)
+# Opción 2: Operaciones intermedias
+#   → Sub-opción 1: Filtrar cada archivo individualmente
+#   → Sub-opción 2: Unificar TPs para un curso
+#   → Sub-opción 3: Unificar Parciales para un curso
 ```
 
 ### 4. Obtener Resultados
@@ -159,8 +159,8 @@ El sistema acepta **cualquier combinación de mayúsculas y minúsculas**:
 outputs/1K2/
 ├── TP1_1K2_filtrado.csv
 ├── TP2_1K2_filtrado.csv
-├── TPs_1K2_mergeado.csv
-├── Parciales_1K2_mergeado.csv
+├── TPs_1K2_unificado.csv
+├── Parciales_1K2_unificado.csv
 └── Planilla_Final_1K2.xls
 ```
 
@@ -262,7 +262,7 @@ Este es el directorio donde se crearán `inputs/` y `outputs/`, independientemen
 
 ### "No se encontró el archivo filtrado"
 
-**Problema**: Intentas mergear sin filtrar primero.
+**Problema**: Intentas unificar sin filtrar primero.
 
 **Solución**: El programa filtra automáticamente si faltan archivos.
 

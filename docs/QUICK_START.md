@@ -95,7 +95,7 @@ El sistema acepta **cualquier combinación de mayúsculas y minúsculas**:
    python3 main.py
    ```
 
-3. **Seleccionar opción 4** (Generar Planilla Final)
+3. **Seleccionar opción 1** (Generar planilla de notas)
 
 4. **Ingresar curso**: `1K2`
 
@@ -104,24 +104,38 @@ El sistema acepta **cualquier combinación de mayúsculas y minúsculas**:
 **¡Eso es todo!** El sistema automáticamente:
 - ✅ Filtra mejores calificaciones
 - ✅ Consolida archivos múltiples
-- ✅ Genera merges de TPs y Parciales
+- ✅ Unifica TPs y Parciales
 - ✅ Cuenta intentos por TP
 - ✅ Crea planilla final consolidada
 
 ## 🎛️ Opciones del Menú
 
+### Menú Principal
+
+```
+1) Generar planilla de notas (XLS)
+   → Crea archivo XLS completo con todo consolidado
+
+2) Operaciones intermedias
+   → Accede a operaciones de procesamiento individual
+   
+h) Ayuda - Abrir manual de usuario
+q) Salir
+```
+
+### Submenú de Operaciones Intermedias
+
 ```
 1) Filtrar mejor calificación por alumno
    → Para procesar un archivo CSV individual
 
-2) Mergear TPs
+2) Unificar TPs
    → Consolida todos los TPs de un curso (incluye intentos)
 
-3) Mergear Parciales
+3) Unificar Parciales
    → Consolida Parciales y Recuperatorios de un curso
 
-4) Generar Planilla Final
-   → Crea archivo XLS completo con todo consolidado
+v) Volver al menú principal
 ```
 
 ## ⚙️ Personalización Rápida
@@ -194,7 +208,9 @@ pip install xlwt
 
 ## 💡 Tip Pro
 
-Usa la **opción 4 directamente** - el sistema preguntará automáticamente si quieres generar los merges necesarios (respuesta por defecto: Sí). Solo presiona Enter dos veces y listo! 🎉
+Usa la **opción 1 directamente** (Generar planilla de notas) - el sistema preguntará automáticamente si quieres generar los merges necesarios (respuesta por defecto: Sí). Solo presiona Enter dos veces y listo! 🎉
+
+Para operaciones avanzadas de procesamiento individual, usa la **opción 2** (Operaciones intermedias) que te da acceso completo a filtrado y merge de archivos individuales.
 
 ---
 

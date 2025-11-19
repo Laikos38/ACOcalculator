@@ -59,15 +59,15 @@ class TestFullWorkflow:
         # Paso 1: Mergear TPs
         env['tp_manager'].merge_tps("1K2")
         
-        # Verificar archivo de TPs mergeado
-        tps_file = os.path.join(env['dirs']['output'], "1K2", "TPs_1K2_mergeado.csv")
+        # Verificar archivo de TPs unificado
+        tps_file = os.path.join(env['dirs']['output'], "1K2", "TPs_1K2_unificado.csv")
         assert os.path.exists(tps_file)
         
-        # Paso 2: Mergear Parciales
+        # Paso 2: Unificar Parciales
         env['exam_manager'].merge_exams("1K2")
         
-        # Verificar archivo de Parciales mergeado
-        parciales_file = os.path.join(env['dirs']['output'], "1K2", "Parciales_1K2_mergeado.csv")
+        # Verificar archivo de Parciales unificado
+        parciales_file = os.path.join(env['dirs']['output'], "1K2", "Parciales_1K2_unificado.csv")
         assert os.path.exists(parciales_file)
         
         # Paso 3: Generar reporte final (sin interacción del usuario)
@@ -94,7 +94,7 @@ class TestFullWorkflow:
         env['tp_manager'].merge_tps("1K2")
         
         # Leer resultado
-        tps_file = os.path.join(env['dirs']['output'], "1K2", "TPs_1K2_mergeado.csv")
+        tps_file = os.path.join(env['dirs']['output'], "1K2", "TPs_1K2_unificado.csv")
         with open(tps_file, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             rows = {row["Número de ID"]: row for row in reader}
@@ -133,7 +133,7 @@ class TestPerformance:
         assert duration < 5.0
         
         # Verificar que se procesaron todos
-        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_mergeado.csv")
+        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
         with open(output_file, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             rows = list(reader)

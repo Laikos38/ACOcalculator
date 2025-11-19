@@ -112,7 +112,7 @@ docs/       - Documentación completa
 ✓ No requiere Python instalado
 ✓ Incluye todas las dependencias
 ✓ Procesamiento automático de calificaciones
-✓ Merge de TPs y Parciales
+✓ Unificación de TPs y Parciales
 ✓ Generación de planillas finales en XLS
 ✓ Seguimiento de intentos por estudiante
 ✓ Consolidación automática de múltiples archivos

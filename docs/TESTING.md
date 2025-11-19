@@ -243,7 +243,7 @@ def test_full_workflow(test_config_path, test_dirs):
     manager.merge_tps("1K2")
     
     # Verificación
-    output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_mergeado.csv")
+    output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
     assert os.path.exists(output_file)
 ```
 

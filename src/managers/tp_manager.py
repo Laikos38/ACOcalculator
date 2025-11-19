@@ -109,11 +109,11 @@ class TPManager:
                     data[student_id][f"{tp}_Intentos"] = attempts.get(student_id, 1)
         
         if not data:
-            print("⚠️ No se pudo generar el merge porque no hay datos disponibles.")
+            print("⚠️ No se pudo unificar los TPs porque no hay datos disponibles.")
             return
         
         os.makedirs(output_course_dir, exist_ok=True)
-        merge_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_mergeado.csv")
+        merge_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_unificado.csv")
         
         # Construir fieldnames dinámicamente
         fieldnames = ["Apellido(s)", "Nombre", "Número de ID"]
@@ -126,7 +126,7 @@ class TPManager:
         
         save_csv(merge_file, fieldnames, list(data.values()), self.encoding)
         
-        print(f"✅ Merge completado: {merge_file}")
+        print(f"✅ Unificación de TPs completada: {merge_file}")
     
     def _count_original_file_attempts(self, base_name: str, course: str) -> Dict[str, int]:
         """

@@ -132,10 +132,9 @@ $ ./dist/ACOCalculator
    Puedes editarlo para personalizar el comportamiento del sistema.
 
 === MENÚ ===
-1) Filtrar mejor calificación por alumno
-2) Mergear TPs
-3) Mergear Parciales
-4) Generar Planilla Final (XLS)
+1) Generar planilla de notas (XLS)
+2) Operaciones intermedias
+h) Ayuda - Abrir manual de usuario
 q) Salir
 ```
 

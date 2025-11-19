@@ -100,52 +100,14 @@ Cuando ejecutas el programa, verás este menú:
 ============================================================
  SISTEMA DE GESTIÓN DE CALIFICACIONES - MOODLE
 ============================================================
-1) Filtrar mejor calificación por alumno
-2) Mergear TPs (incluye seguimiento de intentos)
-3) Mergear Parciales y Recuperatorios
-4) Generar Planilla Final (XLS)
+1) Generar planilla de notas (XLS)
+2) Operaciones intermedias
 h) Ayuda - Abrir manual de usuario
 q) Salir
 ============================================================
 ```
 
-### Opción 1: Filtrar mejor calificación
-
-**¿Qué hace?**  
-Si un alumno entregó varias veces el mismo TP, esta opción se queda solo con el intento de mejor nota.
-
-**Pasos:**
-1. Selecciona opción `1`
-2. Elige el archivo CSV de la lista
-3. El resultado se guarda en `outputs/CURSO/archivo_filtrado.csv`
-
-### Opción 2: Mergear TPs
-
-**¿Qué hace?**  
-Junta todos los TPs de un curso en UN SOLO archivo.
-
-**Pasos:**
-1. Selecciona opción `2`
-2. Escribe el código del curso (ej: `1K2`)
-3. Se crea `outputs/1K2/TPs_1K2_mergeado.csv`
-
-**📊 El archivo incluye:**
-- Apellido y Nombre del alumno
-- Calificación de Moodle
-- Cantidad de intentos por TP
-- Calificación según la escala de la cátedra
-
-### Opción 3: Mergear Parciales
-
-**¿Qué hace?**  
-Igual que la opción 2, pero para Parciales y Recuperatorios.
-
-**Pasos:**
-1. Selecciona opción `3`
-2. Escribe el código del curso
-3. Se crea `outputs/1K2/Parciales_1K2_mergeado.csv`
-
-### Opción 4: Generar Planilla Final
+### Opción 1: Generar Planilla de Notas (XLS)
 
 **¿Qué hace?**  
 Crea un archivo Excel (`.xls`) con **TODAS** las notas juntas:
@@ -154,15 +116,69 @@ Crea un archivo Excel (`.xls`) con **TODAS** las notas juntas:
 - Todos los Recuperatorios
 
 **Pasos:**
-1. Selecciona opción `4`
-2. Escribe el código del curso
-3. Se crea `outputs/1K2/Planilla_Final_1K2.xls`
+1. Selecciona opción `1`
+2. Escribe el código del curso (ej: `1K2 o 1k2`)
+3. Se crea la planilla en `outputs/1K2/Planilla_Final_1K2.xls`
 
 **📊 Este archivo incluye:**
 - Datos del alumno (Apellido, Nombre, ID)
 - Nota decimal de Moodle (ej: 8.5)
 - Nota entera convertida (ej: 9)
 - Cantidad de intentos por TP
+
+### Opción 2: Operaciones Intermedias
+
+**¿Qué hace?**  
+Abre un submenú con operaciones de procesamiento individual para usuarios avanzados.
+
+**Submenú de Operaciones Intermedias:**
+
+```
+============================================================
+ OPERACIONES INTERMEDIAS
+============================================================
+1) Filtrar mejor calificación por alumno
+2) Unificar TPs
+3) Unificar Parciales y Recuperatorios
+v) Volver al menú principal
+============================================================
+```
+
+#### Sub-opción 1: Filtrar mejor calificación
+
+**¿Qué hace?**  
+Si un alumno entregó varias veces el mismo TP, esta opción se queda solo con el intento de mejor nota.
+
+**Pasos:**
+1. Selecciona sub-opción `1`
+2. Elige el archivo CSV de la lista
+3. El resultado se guarda en `outputs/CURSO/archivo_filtrado.csv`
+
+#### Sub-opción 2: Unificar TPs
+
+**¿Qué hace?**  
+Junta todos los TPs de un curso en UN SOLO archivo.
+
+**Pasos:**
+1. Selecciona sub-opción `2`
+2. Escribe el código del curso (ej: `1K2`)
+3. Se crea `outputs/1K2/TPs_1K2_unificado.csv`
+
+**📊 El archivo incluye:**
+- Apellido y Nombre del alumno
+- Calificación de Moodle
+- Cantidad de intentos por TP
+- Calificación según la escala de la cátedra
+
+#### Sub-opción 3: Unificar Parciales
+
+**¿Qué hace?**  
+Igual que la sub-opción 2, pero para Parciales y Recuperatorios.
+
+**Pasos:**
+1. Selecciona sub-opción `3`
+2. Escribe el código del curso
+3. Se crea `outputs/1K2/Parciales_1K2_unificado.csv`
 
 ### Opción h: Ayuda
 
@@ -176,37 +192,44 @@ Cierra el programa.
 
 ## 💡 Ejemplos Prácticos
 
-### Ejemplo 1: Procesar TPs del curso 1K2
+### Ejemplo 1: Generar Planilla Final (Caso más común)
 
 ```
-1. Poner en inputs/:
+1. Ejecutar programa
+
+2. Mover a la carpeta inputs/:
+   📄 TP1_1K2.csv
+   📄 TP2_1K2.csv
+   📄 TP3_1K2.csv
+   📄 TP4_1K2.csv
+   📄 Parcial1_1K2.csv
+   📄 Parcial2_1K2.csv
+   📄 Recuperatorio1_1K2.csv
+
+3. Seleccionar opción 1 → Generar planilla de notas (XLS)
+   → Escribir: 1K2
+
+4. ¡Listo! Resultado en:
+   outputs/1K2/Planilla_Final_1K2.xls
+```
+
+### Ejemplo 2: Procesar TPs individualmente (Operaciones Intermedias)
+
+```
+1. Ejecutar programa
+
+2. Poner en inputs/:
    - TP1_1K2.csv
    - TP2_1K2.csv
    - TP3_1K2.csv
    - TP4_1K2.csv
 
-2. Ejecutar programa
-
-3. Seleccionar opción 2 → Mergear TPs
+3. Seleccionar opción 2 → Operaciones intermedias
+   → Seleccionar sub-opción 2 → Unificar TPs
    → Escribir: 1K2
 
 4. ¡Listo! Resultado en:
-   outputs/1K2/TPs_1K2_mergeado.csv
-```
-
-### Ejemplo 2: Procesar todo (TPs + Parciales + Planilla Final)
-
-```
-1. Poner en inputs/:
-   📄 TP1_1K2.csv
-   📄 TP2_1K2.csv
-   📄 Parcial1_1K2.csv
-   📄 Parcial2_1K2.csv
-   📄 Recuperatorio1_1K2.csv
-
-2. Generar Planilla Final (opción 4) → Escribir: 1K2
-
-3. Abrir: outputs/1K2/Planilla_Final_1K2.xls
+   outputs/1K2/TPs_1K2_unificado.csv
 ```
 
 ---
@@ -230,16 +253,16 @@ Significa que se eliminaron los intentos repetidos, quedándose solo con la mejo
 ```
 outputs/
 ├── 1K2/
-│   ├── TPs_1K2_mergeado.csv
+│   ├── TPs_1K2_unificado.csv
 │   └── Planilla_Final_1K2.xls
 └── 1K4/
-    ├── TPs_1K4_mergeado.csv
+    ├── TPs_1K4_unificado.csv
     └── Planilla_Final_1K4.xls
 ```
 
 ### ¿Cómo sé cuántos intentos hizo un alumno?
 
-En el archivo mergeado de TPs, verás columnas como:
+En el archivo unificado de TPs, verás columnas como:
 - `TP1_Intentos` → Cantidad de veces que entregó el TP1
 - `TP2_Intentos` → Cantidad de veces que entregó el TP2
 

@@ -29,7 +29,7 @@ class TestTPManager:
         assert tp_manager.output_dir == "test_outputs"
     
     def test_merge_tps_crea_archivo(self, tp_manager, test_dirs):
-        """Debe crear archivo mergeado de TPs."""
+        """Debe crear archivo unificado de TPs."""
         # Crear archivos de TP de prueba
         input_dir = test_dirs['input']
         
@@ -43,8 +43,8 @@ class TestTPManager:
         # Ejecutar merge
         tp_manager.merge_tps("1K2")
         
-        # Verificar que se creó el archivo mergeado
-        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_mergeado.csv")
+        # Verificar que se creó el archivo unificado
+        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
         assert os.path.exists(output_file)
         
         # Verificar contenido
@@ -86,7 +86,7 @@ class TestTPManagerAttempts:
         tp_manager.merge_tps("1K2")
         
         # Leer resultado
-        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_mergeado.csv")
+        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
         
         with open(output_file, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)

@@ -59,7 +59,7 @@ from src import QuizManager
 quiz_manager = QuizManager(config)
 
 # Agregar opción en menú
-print("5) Mergear Quizzes")
+print("5) Unificar Quizzes")
 ```
 
 ### 2. Agregar Nueva Métrica o Estadística
@@ -89,7 +89,7 @@ from ..utils import ConfigLoader
 
 class JSONGenerator:
     def generar_json(self, curso: str):
-        # ... leer datos mergeados
+        # ... leer datos unificados
         # ... convertir a estructura JSON
         # ... guardar archivo
         pass

@@ -109,11 +109,11 @@ class ParcialManager:
                     data[student_id][f"{evaluation}_Nota"] = convert_grade_to_integer(grade_decimal)
         
         if not data:
-            print("⚠️ No se pudo generar el merge porque no hay datos disponibles.")
+            print("⚠️ No se pudo unificar los Parciales porque no hay datos disponibles.")
             return
         
         os.makedirs(output_course_dir, exist_ok=True)
-        merge_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_mergeado.csv")
+        merge_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_unificado.csv")
         
         # Construir fieldnames dinámicamente
         fieldnames = ["Apellido(s)", "Nombre", "Número de ID"]
@@ -130,7 +130,7 @@ class ParcialManager:
         
         save_csv(merge_file, fieldnames, list(data.values()), self.encoding)
         
-        print(f"✅ Merge completado: {merge_file}")
+        print(f"✅ Unificación de Parciales completada: {merge_file}")
     
     def filter_best_grade(self, file_name: str, detected_course: str = None):
         """

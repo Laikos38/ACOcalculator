@@ -1,0 +1,9 @@
+- [ ] Anexo para explicar como abrir CSV en excel
+- [x] Cambiar menu a Generar planilla final y Otras operaciones
+- [ ] Cambiar nombre a “ACO - Bajar notas de Moodle”
+- [x] Cambiar palabra mercera por unificar
+- [ ] Ocultar sección de python
+- [ ] Eliminar fila promedio general
+- [ ] Cambiar prints para explicar que si no encuentra un archivo previo lo va a crear
+- [ ] Agregar colores a la consola
+- [ ] Ver como mostrar los emojis en windows cmd, o hacer que se abra con powershell por default

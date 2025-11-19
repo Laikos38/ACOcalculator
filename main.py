@@ -82,35 +82,25 @@ def ensure_directories(config):
         print(f"   • Salida: {output_dir}/")
 
 
-def menu():
+def intermediate_operations_submenu(config, tp_manager, exam_manager):
     """
-    Muestra el menú principal y maneja la interacción con el usuario.
+    Muestra el submenú de operaciones intermedias.
+    
+    Args:
+        config: Instancia de ConfigLoader con la configuración
+        tp_manager: Instancia de TPManager
+        exam_manager: Instancia de ParcialManager
     """
-    # Cargar configuración (con fallback a configuración por defecto)
-    config = ConfigLoader("config.ini")
-    
-    # Asegurar que existen los directorios necesarios
-    ensure_directories(config)
-    print("")
-    
-    # Inicializar managers
-    tp_manager = TPManager(config)
-    exam_manager = ParcialManager(config)
-    report_generator = ReportGenerator(config)
-    
-    # Obtener directorios de configuración
     source_dir = config.get_source_dir()
     
     while True:
         print("\n" + "="*60)
-        print(" SISTEMA DE GESTIÓN DE CALIFICACIONES - MOODLE")
+        print(" OPERACIONES INTERMEDIAS")
         print("="*60)
         print("1) Filtrar mejor calificación por alumno")
-        print("2) Mergear TPs")
-        print("3) Mergear Parciales y Recuperatorios")
-        print("4) Generar Planilla Final (XLS)")
-        print("h) Ayuda - Abrir manual de usuario")
-        print("q) Salir")
+        print("2) Unificar TPs")
+        print("3) Unificar Parciales y Recuperatorios")
+        print("v) Volver al menú principal")
         print("="*60)
         option = input("Selecciona una opción: ").strip()
         
@@ -165,7 +155,40 @@ def menu():
             else:
                 print("❌ Curso inválido")
         
-        elif option == "4":
+        elif option.lower() == "v":
+            break
+        else:
+            print("❌ Opción no válida. Por favor, selecciona una opción del menú.")
+
+
+def menu():
+    """
+    Muestra el menú principal y maneja la interacción con el usuario.
+    """
+    # Cargar configuración (con fallback a configuración por defecto)
+    config = ConfigLoader("config.ini")
+    
+    # Asegurar que existen los directorios necesarios
+    ensure_directories(config)
+    print("")
+    
+    # Inicializar managers
+    tp_manager = TPManager(config)
+    exam_manager = ParcialManager(config)
+    report_generator = ReportGenerator(config)
+    
+    while True:
+        print("\n" + "="*60)
+        print(" SISTEMA DE GESTIÓN DE CALIFICACIONES - MOODLE")
+        print("="*60)
+        print("1) Generar planilla de notas (XLS)")
+        print("2) Operaciones intermedias")
+        print("h) Ayuda - Abrir manual de usuario")
+        print("q) Salir")
+        print("="*60)
+        option = input("Selecciona una opción: ").strip()
+        
+        if option == "1":
             print("\n" + "-"*60)
             course = input("Ingrese el curso (ej: 1K4, 1K2): ").strip()
             print("-"*60)
@@ -174,6 +197,9 @@ def menu():
                 report_generator.generate_final_report(course, tp_manager, exam_manager)
             else:
                 print("❌ Curso inválido")
+        
+        elif option == "2":
+            intermediate_operations_submenu(config, tp_manager, exam_manager)
         
         elif option.lower() == "h":
             print("\n" + "="*60)

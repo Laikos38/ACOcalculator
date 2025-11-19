@@ -235,11 +235,11 @@ def mergear_tps(curso):
                 datos[alumno_id][f"{tp}_Nota"] = convertir_nota_a_entero(nota_decimal)
 
     if not datos:
-        print("⚠️ No se pudo generar el merge porque no hay datos disponibles.")
+        print("⚠️ No se pudo unificar los TPs porque no hay datos disponibles.")
         return
 
     os.makedirs(output_curso_dir, exist_ok=True)
-    merge_file = os.path.join(output_curso_dir, f"TPs_{curso.upper()}_mergeado.csv")
+    merge_file = os.path.join(output_curso_dir, f"TPs_{curso.upper()}_unificado.csv")
     with open(merge_file, "w", newline='', encoding="utf-8-sig") as f:
         fieldnames = [
             "Apellido(s)", "Nombre", "Número de ID", 
@@ -252,7 +252,7 @@ def mergear_tps(curso):
         writer.writeheader()
         writer.writerows(datos.values())
 
-    print(f"✅ Merge completado: {merge_file}")
+    print(f"✅ Unificación de TPs completada: {merge_file}")
 
 def mergear_parciales(curso):
     archivos = {
@@ -308,11 +308,11 @@ def mergear_parciales(curso):
                 datos[alumno_id][f"{parcial}_Nota"] = convertir_nota_a_entero(nota_decimal)
 
     if not datos:
-        print("⚠️ No se pudo generar el merge porque no hay datos disponibles.")
+        print("⚠️ No se pudo unificar los Parciales porque no hay datos disponibles.")
         return
 
     os.makedirs(output_curso_dir, exist_ok=True)
-    merge_file = os.path.join(output_curso_dir, f"Parciales_{curso.upper()}_mergeado.csv")
+    merge_file = os.path.join(output_curso_dir, f"Parciales_{curso.upper()}_unificado.csv")
     with open(merge_file, "w", newline='', encoding="utf-8-sig") as f:
         fieldnames = [
             "Apellido(s)", "Nombre", "Número de ID", 
@@ -325,7 +325,7 @@ def mergear_parciales(curso):
         writer.writeheader()
         writer.writerows(datos.values())
 
-    print(f"✅ Merge completado: {merge_file}")
+    print(f"✅ Unificación de Parciales completada: {merge_file}")
 
 def generar_planilla_final(curso):
     """
@@ -343,32 +343,32 @@ def generar_planilla_final(curso):
     output_curso_dir = os.path.join(OUTPUT_DIR, curso.upper())
     
     # Archivos mergeados de TPs y Parciales
-    tps_file = os.path.join(output_curso_dir, f"TPs_{curso.upper()}_mergeado.csv")
-    parciales_file = os.path.join(output_curso_dir, f"Parciales_{curso.upper()}_mergeado.csv")
+    tps_file = os.path.join(output_curso_dir, f"TPs_{curso.upper()}_unificado.csv")
+    parciales_file = os.path.join(output_curso_dir, f"Parciales_{curso.upper()}_unificado.csv")
     
     # Verificar que existan los archivos mergeados
     if not os.path.exists(tps_file):
-        print(f"⚠️ No se encontró el archivo de TPs mergeado: {tps_file}")
-        print(f"   Ejecuta primero la opción 2 (Mergear TPs) para el curso {curso.upper()}")
-        generar = input("¿Quieres generar el merge de TPs ahora? (S/n) [S]: ").strip().lower()
+        print(f"⚠️ No se encontró el archivo de TPs unificado: {tps_file}")
+        print(f"   Ejecuta primero la opción 2 (Unificar TPs) para el curso {curso.upper()}")
+        generar = input("¿Quieres unificar los TPs ahora? (S/n) [S]: ").strip().lower()
         # Por defecto es 's' si no se ingresa nada
         if generar == '' or generar == 's':
             mergear_tps(curso)
             if not os.path.exists(tps_file):
-                print("❌ No se pudo generar el merge de TPs. Abortando.")
+                print("❌ No se pudo unificar los TPs. Abortando.")
                 return
         else:
             return
     
     if not os.path.exists(parciales_file):
-        print(f"⚠️ No se encontró el archivo de Parciales mergeado: {parciales_file}")
-        print(f"   Ejecuta primero la opción 3 (Mergear Parciales) para el curso {curso.upper()}")
-        generar = input("¿Quieres generar el merge de Parciales ahora? (S/n) [S]: ").strip().lower()
+        print(f"⚠️ No se encontró el archivo de Parciales unificado: {parciales_file}")
+        print(f"   Ejecuta primero la opción 3 (Unificar Parciales) para el curso {curso.upper()}")
+        generar = input("¿Quieres unificar los Parciales ahora? (S/n) [S]: ").strip().lower()
         # Por defecto es 's' si no se ingresa nada
         if generar == '' or generar == 's':
             mergear_parciales(curso)
             if not os.path.exists(parciales_file):
-                print("❌ No se pudo generar el merge de Parciales. Abortando.")
+                print("❌ No se pudo unificar los Parciales. Abortando.")
                 return
         else:
             return
@@ -467,8 +467,8 @@ def menu():
     while True:
         print("\n=== MENÚ ===")
         print("1) Filtrar mejor calificación por alumno")
-        print("2) Mergear TPs")
-        print("3) Mergear Parciales")
+        print("2) Unificar TPs")
+        print("3) Unificar Parciales")
         print("4) Generar Planilla Final (XLS)")
         print("q) Salir")
         opcion = input("Selecciona una opción: ").strip()

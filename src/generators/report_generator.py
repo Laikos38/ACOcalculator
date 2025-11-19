@@ -50,8 +50,8 @@ class ReportGenerator:
         output_course_dir = os.path.join(self.output_dir, course)
         
         # Archivos mergeados de TPs y Parciales
-        tps_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_mergeado.csv")
-        exams_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_mergeado.csv")
+        tps_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_unificado.csv")
+        exams_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_unificado.csv")
         
         # Variables para controlar qué datos están disponibles
         tps_data = {}
@@ -61,9 +61,9 @@ class ReportGenerator:
         
         # Intentar obtener datos de TPs
         if not os.path.exists(tps_file):
-            print(f"⚠️ No se encontró el archivo de TPs mergeado: {tps_file}")
+            print(f"⚠️ No se encontró el archivo de TPs unificado: {tps_file}")
             if tp_manager:
-                generate = input("¿Quieres generar el merge de TPs ahora? (S/n) [S]: ").strip().lower()
+                generate = input("¿Quieres unificar los TPs ahora? (S/n) [S]: ").strip().lower()
                 if generate == '' or generate == 's':
                     tp_manager.merge_tps(course)
                     if os.path.exists(tps_file):
@@ -81,9 +81,9 @@ class ReportGenerator:
         
         # Intentar obtener datos de Parciales
         if not os.path.exists(exams_file):
-            print(f"⚠️ No se encontró el archivo de Parciales mergeado: {exams_file}")
+            print(f"⚠️ No se encontró el archivo de Parciales unificado: {exams_file}")
             if exam_manager:
-                generate = input("¿Quieres generar el merge de Parciales ahora? (S/n) [S]: ").strip().lower()
+                generate = input("¿Quieres unificar los Parciales ahora? (S/n) [S]: ").strip().lower()
                 if generate == '' or generate == 's':
                     exam_manager.merge_exams(course)
                     if os.path.exists(exams_file):
