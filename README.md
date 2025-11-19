@@ -13,7 +13,7 @@ Este sistema te ayuda a procesar las calificaciones de Moodle de forma automáti
 
 ✅ **Filtra duplicados** - Si un alumno hizo varias veces un TP, se queda con la mejor nota  
 ✅ **Consolida notas** - Junta todos los TPs y Parciales en un solo archivo  
-✅ **Cuenta intentos** - Te dice cuántas veces intentó un TP cada alumno 
+✅ **Cuenta intentos** - Te dice cuántas veces intentó un TP cada alumno  
 ✅ **Genera reporte final** - Crea una planilla Excel con toda la información  
 
 ---
