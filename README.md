@@ -13,34 +13,18 @@ Este sistema te ayuda a procesar las calificaciones de Moodle de forma automáti
 
 ✅ **Filtra duplicados** - Si un alumno hizo varias veces un TP, se queda con la mejor nota  
 ✅ **Consolida notas** - Junta todos los TPs y Parciales en un solo archivo  
-✅ **Cuenta intentos** - Te dice cuántas veces intentó cada alumno  
-✅ **Genera reporte final** - Crea una planilla Excel con todo junto  
+✅ **Cuenta intentos** - Te dice cuántas veces intentó un TP cada alumno 
+✅ **Genera reporte final** - Crea una planilla Excel con toda la información  
 
 ---
 
 ## 🚀 Inicio Rápido
 
-### Opción 1: Usar el Ejecutable (Recomendado para usuarios)
+### Usar el Ejecutable
 
 1. Descarga el ejecutable que corresponda según tu SO desde [Releases](https://github.com/Laikos38/ACOcalculator/releases)
 2. Doble click para ejecutar
 3. ¡Listo! El programa crea las carpetas necesarias automáticamente
-
-### Opción 2: Ejecutar con Python
-
-Si tienes Python instalado:
-
-```bash
-# Descargar el proyecto
-git clone https://github.com/Laikos38/ACOcalculator.git
-cd ACOcalculator
-
-# Instalar dependencias
-pip install xlwt
-
-# Ejecutar
-python main.py
-```
 
 ---
 
@@ -49,20 +33,20 @@ python main.py
 ### Paso 1: Exportar desde Moodle
 
 1. Entra a tu curso en Moodle
-2. Ve al TP, parcial o recuperatorio que desees procesar, luego click en "Ver intentos" 
+2. Ve al TP, parcial o recuperatorio que desees procesar, luego click en "Intentos" 
 3. Selecciona formato **CSV** y modifica el tamaño de la página para que incluya todos los intentos
-4. Exporta el archivo
+4. Exporta/descarga el archivo
 
 ### Paso 2: Organizar archivos
 
 El programa crea dos carpetas automáticamente:
 
 ```
-📁 inputs/     ← Aquí pones tus archivos CSV de Moodle
+📁 inputs/     ← Aquí dentro debes mover los archivos CSV descargados de Moodle
 📁 outputs/    ← Aquí aparecen los resultados procesados
 ```
 
-**Importante:** Los nombres de archivo deben seguir este formato:
+**Importante:** Los nombres de los archivos dentro de `inputs/` deben seguir el siguiente formato:
 
 **Trabajos Prácticos:**
 - `TP1_1K2.csv`, `TP2_1K4.csv`, etc.
@@ -88,6 +72,8 @@ Si hubo varios turnos para un parcial o recuperatorio, se debe agregar un sufijo
 
 > Si tienes múltiples archivos del mismo parcial (ej: `Parcial1_1K2_1.csv` y `Parcial1_1K2_2.csv`), el programa automáticamente los **consolida** tomando la mejor nota de cada alumno entre todos los archivos.
 
+Si faltara algún archivo durante el procesamiento, el sistema mostrará un mensaje advirtiendo la situación.
+
 ---
 
 ## 🎮 Cómo Usar el Sistema
@@ -111,9 +97,9 @@ q) Salir
 
 **¿Qué hace?**  
 Crea un archivo Excel (`.xls`) con **TODAS** las notas juntas:
-- Todos los TPs con sus intentos
-- Todos los Parciales
-- Todos los Recuperatorios
+- Notas de todos los TPs (mejor intento por alumno)
+- Notas de todos los Parciales
+- Notas de todos los Recuperatorios
 
 **Pasos:**
 1. Selecciona opción `1`

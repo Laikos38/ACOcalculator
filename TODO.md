@@ -1,9 +1,10 @@
+- [-] Cambiar nombre a “ACO - Bajar notas de Moodle”
 - [ ] Anexo para explicar como abrir CSV en excel
+- [ ] Fixear los numeros generados como strings en excel
 - [x] Cambiar menu a Generar planilla final y Otras operaciones
-- [ ] Cambiar nombre a “ACO - Bajar notas de Moodle”
 - [x] Cambiar palabra mercera por unificar
-- [ ] Ocultar sección de python
+- [x] Ocultar sección de python
 - [ ] Eliminar fila promedio general
-- [ ] Cambiar prints para explicar que si no encuentra un archivo previo lo va a crear
+- [x] Cambiar prints para explicar que si no encuentra un archivo previo lo va a crear
 - [ ] Agregar colores a la consola
 - [ ] Ver como mostrar los emojis en windows cmd, o hacer que se abra con powershell por default

@@ -71,9 +71,9 @@ class ParcialManager:
             
             # Si no existe el filtrado, generarlo desde el/los source(s)
             if not os.path.exists(filtered_file):
-                print(f"⚠️ No se encontró el archivo filtrado para {base_name}. Buscando archivos source...")
+                print(f"⚠️ No se encontró el archivo filtrado para {base_name}. Generando desde archivos en inputs/...")
                 if not self.consolidator.consolidate_multiple_files(base_name, course):
-                    print(f"⚠️ No se encontraron archivos source para {base_name}. Se ignorará.")
+                    print(f"⚠️ No se encontraron archivos en inputs/ para {base_name}. Se ignorará.")
                     continue
             
             # Leer el archivo filtrado (ya existente o recién generado)

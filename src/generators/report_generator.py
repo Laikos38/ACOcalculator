@@ -62,6 +62,7 @@ class ReportGenerator:
         # Intentar obtener datos de TPs
         if not os.path.exists(tps_file):
             print(f"⚠️ No se encontró el archivo de TPs unificado: {tps_file}")
+            print(f"   Se intentará generar el archivo unificado...")
             if tp_manager:
                 generate = input("¿Quieres unificar los TPs ahora? (S/n) [S]: ").strip().lower()
                 if generate == '' or generate == 's':
@@ -82,6 +83,7 @@ class ReportGenerator:
         # Intentar obtener datos de Parciales
         if not os.path.exists(exams_file):
             print(f"⚠️ No se encontró el archivo de Parciales unificado: {exams_file}")
+            print(f"   Se intentará generar el archivo unificado...")
             if exam_manager:
                 generate = input("¿Quieres unificar los Parciales ahora? (S/n) [S]: ").strip().lower()
                 if generate == '' or generate == 's':

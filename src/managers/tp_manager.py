@@ -68,9 +68,9 @@ class TPManager:
             
             # Si no existe el filtrado, generarlo desde el/los source(s)
             if not os.path.exists(filtered_file):
-                print(f"⚠️ No se encontró el archivo filtrado para {base_name}. Buscando archivos source...")
+                print(f"⚠️ No se encontró el archivo filtrado para {base_name}. Generando desde archivos en inputs/...")
                 if not self.consolidator.consolidate_multiple_files(base_name, course):
-                    print(f"⚠️ No se encontraron archivos source para {base_name}. Se ignorará este TP.")
+                    print(f"⚠️ No se encontraron archivos en inputs/ para {base_name}. Se ignorará este TP.")
                     continue
             
             # Contar intentos de todos los archivos originales antes del filtrado
