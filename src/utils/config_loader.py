@@ -33,6 +33,9 @@ recuperatorio_prefix = Recuperatorio
 [Formatos]
 csv_encoding = utf-8-sig
 output_format = xls
+
+[Procesamiento]
+calculate_avg_grades = false
 """
     
     def __init__(self, config_path="config.ini"):
@@ -115,6 +118,10 @@ output_format = xls
     def get_output_format(self):
         """Retorna el formato de salida para planillas finales."""
         return self.config.get('Formatos', 'output_format', fallback='xls')
+    
+    def get_calculate_avg_grades(self):
+        """Retorna si se deben calcular y mostrar los promedios generales de Moodle."""
+        return self.config.getboolean('Procesamiento', 'calculate_avg_grades', fallback=False)
     
     def _create_default_config_file(self, config_path):
         """

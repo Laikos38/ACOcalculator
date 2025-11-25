@@ -1,6 +1,5 @@
-- [-] Cambiar nombre a “ACO - Bajar notas de Moodle”
 - [ ] Anexo para explicar como abrir CSV en excel
-- [ ] Fixear los numeros generados como strings en excel
+- [x] Fixear los numeros generados como strings en excel
 - [x] Cambiar menu a Generar planilla final y Otras operaciones
 - [x] Cambiar palabra mercera por unificar
 - [x] Ocultar sección de python

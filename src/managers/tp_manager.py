@@ -33,12 +33,14 @@ class TPManager:
         self.encoding = config.get_csv_encoding()
         self.tp_count = config.get_cantidad_tps()
         self.tp_prefix = config.get_tp_prefix()
+        self.calculate_avg_grades = config.get_calculate_avg_grades()
         
         self.consolidator = FileConsolidator(
             self.source_dir,
             self.output_dir,
             self.header_map,
-            self.encoding
+            self.encoding,
+            self.calculate_avg_grades
         )
     
     def merge_tps(self, course: str):
@@ -100,11 +102,15 @@ class TPManager:
                             data[student_id][f"{self.tp_prefix}{i}_Nota"] = ""
                             data[student_id][f"{self.tp_prefix}{i}_Intentos"] = ""
                     
-                    # Guardar la nota decimal
-                    grade_decimal = row[grade_col].replace(",", ".")
-                    data[student_id][tp] = grade_decimal
+                    # Guardar la nota decimal como float redondeado a 2 decimales
+                    grade_col_value = row[grade_col]
+                    if isinstance(grade_col_value, str):
+                        grade_decimal = float(grade_col_value.replace(",", "."))
+                    else:
+                        grade_decimal = float(grade_col_value)
+                    data[student_id][tp] = round(grade_decimal, 2)
                     # Guardar la nota convertida a entero
-                    data[student_id][f"{tp}_Nota"] = convert_grade_to_integer(grade_decimal)
+                    data[student_id][f"{tp}_Nota"] = convert_grade_to_integer(str(grade_decimal))
                     # Guardar la cantidad de intentos
                     data[student_id][f"{tp}_Intentos"] = attempts.get(student_id, 1)
         
@@ -147,7 +153,7 @@ class TPManager:
         total_attempts = {}
         
         for file in found_files:
-            attempts = count_student_attempts(file, self.header_map, self.encoding)
+            attempts = count_student_attempts(file, self.header_map, self.encoding, self.calculate_avg_grades)
             for student_id, count in attempts.items():
                 total_attempts[student_id] = total_attempts.get(student_id, 0) + count
         

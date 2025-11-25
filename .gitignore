@@ -84,3 +84,4 @@ test_*.csv
 prueba_*.csv
 
 htmlcov/
+pruebas/*

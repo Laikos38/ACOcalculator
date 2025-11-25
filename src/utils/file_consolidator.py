@@ -5,7 +5,7 @@ import glob
 import os
 import csv
 from typing import Dict, List
-from .csv_helpers import get_col_name, save_csv, read_csv_with_best_grades, detect_grade_scale, normalize_grade_to_scale_10
+from .csv_helpers import get_col_name, save_csv, read_csv_with_best_grades, detect_grade_scale, normalize_grade_to_scale_10, is_average_row
 
 
 def find_files_case_insensitive(directory: str, base_pattern: str) -> List[str]:
@@ -57,7 +57,7 @@ def find_files_case_insensitive(directory: str, base_pattern: str) -> List[str]:
 class FileConsolidator:
     """Clase para consolidar múltiples archivos CSV de un mismo TP o Parcial."""
     
-    def __init__(self, source_dir: str, output_dir: str, header_map: Dict, encoding: str = 'utf-8-sig'):
+    def __init__(self, source_dir: str, output_dir: str, header_map: Dict, encoding: str = 'utf-8-sig', calculate_avg_grades: bool = False):
         """
         Inicializa el consolidador de archivos.
         
@@ -66,11 +66,13 @@ class FileConsolidator:
             output_dir: Directorio de archivos de salida
             header_map: Mapeo de nombres de columnas
             encoding: Encoding de archivos CSV
+            calculate_avg_grades: Si False, filtra la fila "Promedio general" de Moodle
         """
         self.source_dir = source_dir
         self.output_dir = output_dir
         self.header_map = header_map
         self.encoding = encoding
+        self.calculate_avg_grades = calculate_avg_grades
     
     def consolidate_multiple_files(self, base_name: str, course: str) -> bool:
         """
@@ -135,6 +137,10 @@ class FileConsolidator:
                 scale_max = detect_grade_scale(grade_col)
                 
                 for row in reader:
+                    # Filtrar fila de "Promedio general" si está configurado
+                    if not self.calculate_avg_grades and is_average_row(row, self.header_map):
+                        continue
+                    
                     student_id = row[id_col]
                     grade = float(row[grade_col].replace(",", "."))
                     
@@ -142,18 +148,19 @@ class FileConsolidator:
                     normalized_grade = normalize_grade_to_scale_10(grade, scale_max)
                     
                     if student_id not in best_attempts:
-                        # Guardar con nota normalizada
+                        # Guardar con nota normalizada (redondeada a 2 decimales)
                         normalized_row = row.copy()
-                        normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                        normalized_row[grade_col] = round(normalized_grade, 2)
                         best_attempts[student_id] = normalized_row
                     else:
-                        current_grade_str = best_attempts[student_id][grade_col].replace(",", ".")
-                        current_grade = float(current_grade_str)
+                        current_grade = best_attempts[student_id][grade_col]
+                        if isinstance(current_grade, str):
+                            current_grade = float(current_grade.replace(",", "."))
                         
                         if normalized_grade > current_grade:
-                            # Actualizar con nota normalizada
+                            # Actualizar con nota normalizada (redondeada a 2 decimales)
                             normalized_row = row.copy()
-                            normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                            normalized_row[grade_col] = round(normalized_grade, 2)
                             best_attempts[student_id] = normalized_row
         
         # Guardar el archivo consolidado
@@ -186,7 +193,7 @@ class FileConsolidator:
                 raise ValueError(f"El archivo '{input_file}' no tiene columnas")
         
         # Procesar archivo
-        best_attempts = read_csv_with_best_grades(input_file, self.header_map, self.encoding)
+        best_attempts = read_csv_with_best_grades(input_file, self.header_map, self.encoding, self.calculate_avg_grades)
         
         # Guardar resultado (incluso si está vacío)
         save_csv(output_file, fieldnames, list(best_attempts.values()), self.encoding)

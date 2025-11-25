@@ -32,12 +32,14 @@ class ParcialManager:
         self.makeup_count = config.get_cantidad_recuperatorios()
         self.exam_prefix = config.get_parcial_prefix()
         self.makeup_prefix = config.get_recuperatorio_prefix()
+        self.calculate_avg_grades = config.get_calculate_avg_grades()
         
         self.consolidator = FileConsolidator(
             self.source_dir,
             self.output_dir,
             self.header_map,
-            self.encoding
+            self.encoding,
+            self.calculate_avg_grades
         )
     
     def merge_exams(self, course: str):
@@ -102,11 +104,15 @@ class ParcialManager:
                             data[student_id][f"{self.makeup_prefix}{i}"] = ""
                             data[student_id][f"{self.makeup_prefix}{i}_Nota"] = ""
                     
-                    # Guardar la nota decimal
-                    grade_decimal = row[grade_col].replace(",", ".")
-                    data[student_id][evaluation] = grade_decimal
+                    # Guardar la nota decimal como float redondeado a 2 decimales
+                    grade_col_value = row[grade_col]
+                    if isinstance(grade_col_value, str):
+                        grade_decimal = float(grade_col_value.replace(",", "."))
+                    else:
+                        grade_decimal = float(grade_col_value)
+                    data[student_id][evaluation] = round(grade_decimal, 2)
                     # Guardar la nota convertida a entero
-                    data[student_id][f"{evaluation}_Nota"] = convert_grade_to_integer(grade_decimal)
+                    data[student_id][f"{evaluation}_Nota"] = convert_grade_to_integer(str(grade_decimal))
         
         if not data:
             print("⚠️ No se pudo unificar los Parciales porque no hay datos disponibles.")

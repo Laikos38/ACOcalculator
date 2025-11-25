@@ -181,25 +181,25 @@ class ReportGenerator:
             
             # TPs (con intentos)
             for i in range(1, self.tp_count + 1):
-                ws.write(row, col_idx, tp_data.get(f"{self.tp_prefix}{i}", ""))
+                ws.write(row, col_idx, self._format_decimal_grade(tp_data.get(f"{self.tp_prefix}{i}", "")))
                 col_idx += 1
-                ws.write(row, col_idx, tp_data.get(f"{self.tp_prefix}{i}_Nota", ""))
+                ws.write(row, col_idx, self._format_integer_grade(tp_data.get(f"{self.tp_prefix}{i}_Nota", "")))
                 col_idx += 1
-                ws.write(row, col_idx, tp_data.get(f"{self.tp_prefix}{i}_Intentos", ""))
+                ws.write(row, col_idx, self._format_attempts(tp_data.get(f"{self.tp_prefix}{i}_Intentos", "")))
                 col_idx += 1
             
             # Parciales
             for i in range(1, self.exam_count + 1):
-                ws.write(row, col_idx, exam_data.get(f"{self.exam_prefix}{i}", ""))
+                ws.write(row, col_idx, self._format_decimal_grade(exam_data.get(f"{self.exam_prefix}{i}", "")))
                 col_idx += 1
-                ws.write(row, col_idx, exam_data.get(f"{self.exam_prefix}{i}_Nota", ""))
+                ws.write(row, col_idx, self._format_integer_grade(exam_data.get(f"{self.exam_prefix}{i}_Nota", "")))
                 col_idx += 1
             
             # Recuperatorios
             for i in range(1, self.makeup_count + 1):
-                ws.write(row, col_idx, exam_data.get(f"{self.makeup_prefix}{i}", ""))
+                ws.write(row, col_idx, self._format_decimal_grade(exam_data.get(f"{self.makeup_prefix}{i}", "")))
                 col_idx += 1
-                ws.write(row, col_idx, exam_data.get(f"{self.makeup_prefix}{i}_Nota", ""))
+                ws.write(row, col_idx, self._format_integer_grade(exam_data.get(f"{self.makeup_prefix}{i}_Nota", "")))
                 col_idx += 1
             
             row += 1
@@ -231,3 +231,65 @@ class ReportGenerator:
                 student_id = row["Número de ID"]
                 data[student_id] = row
         return data
+    
+    def _format_decimal_grade(self, value):
+        """
+        Formatea una nota decimal para Excel.
+        
+        Args:
+            value: Valor de la nota (puede ser string, float, o vacío)
+            
+        Returns:
+            Float redondeado a 2 decimales o string vacío
+        """
+        if not value or value == "":
+            return ""
+        
+        try:
+            if isinstance(value, str):
+                # Convertir string con coma o punto a float
+                num = float(value.replace(",", "."))
+            else:
+                num = float(value)
+            return round(num, 2)
+        except (ValueError, TypeError):
+            return ""
+    
+    def _format_integer_grade(self, value):
+        """
+        Formatea una nota convertida a entero para Excel.
+        
+        Args:
+            value: Valor de la nota convertida (puede ser int, string, o "FALTA")
+            
+        Returns:
+            Entero o string "FALTA" o vacío
+        """
+        if not value or value == "":
+            return ""
+        
+        if value == "FALTA":
+            return "FALTA"
+        
+        try:
+            return int(value)
+        except (ValueError, TypeError):
+            return ""
+    
+    def _format_attempts(self, value):
+        """
+        Formatea la cantidad de intentos para Excel.
+        
+        Args:
+            value: Valor de intentos (puede ser int, string, o vacío)
+            
+        Returns:
+            Entero o string vacío
+        """
+        if not value or value == "":
+            return ""
+        
+        try:
+            return int(value)
+        except (ValueError, TypeError):
+            return ""

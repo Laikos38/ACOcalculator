@@ -6,6 +6,47 @@ import os
 from typing import Dict, List
 
 
+def is_average_row(row: Dict, header_map: Dict) -> bool:
+    """
+    Detecta si una fila corresponde al "Promedio general" de Moodle.
+    
+    Moodle exporta una fila especial con el nombre "Promedio general" que
+    contiene estadísticas de la evaluación, no es un alumno real.
+    
+    Args:
+        row: Fila del CSV como diccionario
+        header_map: Mapeo de nombres de columnas
+        
+    Returns:
+        True si es una fila de promedio general, False en caso contrario
+    """
+    # Buscar la columna de nombre
+    nombre_col = get_col_name_safe(row.keys(), header_map["nombre"])
+    if not nombre_col:
+        return False
+    
+    # Verificar si el nombre es "Promedio general"
+    nombre = row.get(nombre_col, "").strip().lower()
+    return nombre == "promedio general"
+
+
+def get_col_name_safe(fieldnames, possible_names: List[str]) -> str:
+    """
+    Versión segura de get_col_name que retorna None en lugar de lanzar excepción.
+    
+    Args:
+        fieldnames: Lista de nombres de columnas disponibles
+        possible_names: Lista de posibles nombres para la columna buscada
+        
+    Returns:
+        Nombre de la columna encontrada o None si no se encuentra
+    """
+    for name in possible_names:
+        if name in fieldnames:
+            return name
+    return None
+
+
 def get_col_name(fieldnames: List[str], possible_names: List[str]) -> str:
     """
     Devuelve el nombre real de la columna si existe en fieldnames.
@@ -125,7 +166,7 @@ def normalize_grade_to_scale_10(grade: float, scale_max: float) -> float:
         return grade  # Ya está en escala 0-10
 
 
-def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 'utf-8-sig') -> Dict:
+def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 'utf-8-sig', calculate_avg_grades: bool = False) -> Dict:
     """
     Lee un archivo CSV y retorna un diccionario con las mejores notas por alumno.
     Detecta automáticamente la escala de calificación (0-10 o 0-100) y normaliza.
@@ -134,6 +175,7 @@ def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 
         file_path: Ruta al archivo CSV
         header_map: Mapeo de nombres de columnas
         encoding: Encoding del archivo
+        calculate_avg_grades: Si False, filtra la fila "Promedio general" de Moodle
         
     Returns:
         Diccionario con ID de alumno como clave y su mejor registro como valor
@@ -149,6 +191,10 @@ def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 
         scale_max = detect_grade_scale(grade_col)
         
         for row in reader:
+            # Filtrar fila de "Promedio general" si está configurado
+            if not calculate_avg_grades and is_average_row(row, header_map):
+                continue
+            
             student_id = row[id_col]
             grade = float(row[grade_col].replace(",", "."))
             
@@ -156,24 +202,25 @@ def read_csv_with_best_grades(file_path: str, header_map: Dict, encoding: str = 
             normalized_grade = normalize_grade_to_scale_10(grade, scale_max)
             
             if student_id not in best_attempts:
-                # Guardar el registro pero con la nota normalizada a escala 0-10
+                # Guardar el registro pero con la nota normalizada a escala 0-10 (redondeada a 2 decimales)
                 normalized_row = row.copy()
-                normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                normalized_row[grade_col] = round(normalized_grade, 2)
                 best_attempts[student_id] = normalized_row
             else:
-                current_grade_str = best_attempts[student_id][grade_col].replace(",", ".")
-                current_grade = float(current_grade_str)
+                current_grade = best_attempts[student_id][grade_col]
+                if isinstance(current_grade, str):
+                    current_grade = float(current_grade.replace(",", "."))
                 
                 if normalized_grade > current_grade:
-                    # Actualizar con la nota normalizada a escala 0-10
+                    # Actualizar con la nota normalizada a escala 0-10 (redondeada a 2 decimales)
                     normalized_row = row.copy()
-                    normalized_row[grade_col] = str(normalized_grade).replace(".", ",")
+                    normalized_row[grade_col] = round(normalized_grade, 2)
                     best_attempts[student_id] = normalized_row
     
     return best_attempts
 
 
-def count_student_attempts(file_path: str, header_map: Dict, encoding: str = 'utf-8-sig') -> Dict[str, int]:
+def count_student_attempts(file_path: str, header_map: Dict, encoding: str = 'utf-8-sig', calculate_avg_grades: bool = False) -> Dict[str, int]:
     """
     Cuenta la cantidad de intentos por alumno en un archivo CSV.
     
@@ -181,6 +228,7 @@ def count_student_attempts(file_path: str, header_map: Dict, encoding: str = 'ut
         file_path: Ruta al archivo CSV
         header_map: Mapeo de nombres de columnas
         encoding: Encoding del archivo
+        calculate_avg_grades: Si False, filtra la fila "Promedio general" de Moodle
         
     Returns:
         Diccionario con ID de alumno como clave y cantidad de intentos como valor
@@ -195,6 +243,10 @@ def count_student_attempts(file_path: str, header_map: Dict, encoding: str = 'ut
         id_col = get_col_name(reader.fieldnames, header_map["id"])
         
         for row in reader:
+            # Filtrar fila de "Promedio general" si está configurado
+            if not calculate_avg_grades and is_average_row(row, header_map):
+                continue
+            
             student_id = row[id_col]
             attempts[student_id] = attempts.get(student_id, 0) + 1
     

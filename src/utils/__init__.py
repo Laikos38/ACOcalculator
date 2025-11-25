@@ -4,6 +4,8 @@ Módulo de utilidades para el sistema de gestión de calificaciones.
 from .config_loader import ConfigLoader
 from .csv_helpers import (
     get_col_name,
+    get_col_name_safe,
+    is_average_row,
     convert_grade_to_integer,
     read_csv_with_best_grades,
     count_student_attempts,
@@ -16,6 +18,8 @@ __all__ = [
     'FileConsolidator',
     'find_files_case_insensitive',
     'get_col_name',
+    'get_col_name_safe',
+    'is_average_row',
     'convert_grade_to_integer',
     'read_csv_with_best_grades',
     'count_student_attempts',
