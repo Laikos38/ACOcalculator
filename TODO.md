@@ -1,9 +1,10 @@
-- [ ] Anexo para explicar como abrir CSV en excel
+- [x] Anexo para explicar como abrir CSV en excel
 - [x] Fixear los numeros generados como strings en excel
 - [x] Cambiar menu a Generar planilla final y Otras operaciones
 - [x] Cambiar palabra mercera por unificar
 - [x] Ocultar sección de python
-- [ ] Eliminar fila promedio general
+- [x] Eliminar fila promedio general
 - [x] Cambiar prints para explicar que si no encuentra un archivo previo lo va a crear
+- [ ] Testear caso en el que si cambia el archivo de input, cambien los archivos generados en una siguiente ejecución
 - [ ] Agregar colores a la consola
 - [ ] Ver como mostrar los emojis en windows cmd, o hacer que se abra con powershell por default

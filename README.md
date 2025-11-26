@@ -2,8 +2,11 @@
 
 ## 📖 Manual de Usuario - Versión 1.0
 
-> **Para usuarios:** Esta es la guía simplificada para usar el sistema.  
-> **Para desarrolladores:** Ver documentación técnica en [docs/](docs/)
+**Para usuarios:** Esta es la guía simplificada para usar el sistema.  
+**Para desarrolladores:** Ver documentación técnica en [docs/](docs/)
+
+Otros:
+- [Como abrir archivos CSV en Excel](./docs/CSV_ON_EXCEL.md)
 
 ---
 
