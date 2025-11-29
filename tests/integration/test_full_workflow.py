@@ -59,20 +59,20 @@ class TestFullWorkflow:
         # Paso 1: Mergear TPs
         env['tp_manager'].merge_tps("1K2")
         
-        # Verificar archivo de TPs unificado
-        tps_file = os.path.join(env['dirs']['output'], "1K2", "TPs_1K2_unificado.csv")
+        # Verificar archivo de TPs unificado (ahora en subcarpeta 'tps')
+        tps_file = os.path.join(env['dirs']['output'], "1K2", "tps", "TPs_1K2_unificado.csv")
         assert os.path.exists(tps_file)
         
         # Paso 2: Unificar Parciales
         env['exam_manager'].merge_exams("1K2")
         
-        # Verificar archivo de Parciales unificado
-        parciales_file = os.path.join(env['dirs']['output'], "1K2", "Parciales_1K2_unificado.csv")
+        # Verificar archivo de Parciales unificado (ahora en subcarpeta 'parciales')
+        parciales_file = os.path.join(env['dirs']['output'], "1K2", "parciales", "Parciales_1K2_unificado.csv")
         assert os.path.exists(parciales_file)
         
         # Paso 3: Generar reporte final (sin interacción del usuario)
         # Nota: ReportGenerator requiere xlwt que ya está instalado
-        env['report_generator'].generate_final_report("1K2")
+        env['report_generator'].generate_final_report("1K2", env['tp_manager'], env['exam_manager'])
         
         # Verificar archivo final
         final_file = os.path.join(env['dirs']['output'], "1K2", "Planilla_Final_1K2.xls")
@@ -93,8 +93,8 @@ class TestFullWorkflow:
         # Mergear TPs
         env['tp_manager'].merge_tps("1K2")
         
-        # Leer resultado
-        tps_file = os.path.join(env['dirs']['output'], "1K2", "TPs_1K2_unificado.csv")
+        # Leer resultado (ubicación actualizada a subcarpeta 'tps')
+        tps_file = os.path.join(env['dirs']['output'], "1K2", "tps", "TPs_1K2_unificado.csv")
         with open(tps_file, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             rows = {row["Número de ID"]: row for row in reader}
@@ -132,8 +132,8 @@ class TestPerformance:
         # Debe completarse en menos de 5 segundos
         assert duration < 5.0
         
-        # Verificar que se procesaron todos
-        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
+        # Verificar que se procesaron todos (ubicación 'tps')
+        output_file = os.path.join(test_dirs['output'], "1K2", "tps", "TPs_1K2_unificado.csv")
         with open(output_file, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             rows = list(reader)

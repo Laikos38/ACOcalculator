@@ -43,8 +43,8 @@ class TestTPManager:
         # Ejecutar merge
         tp_manager.merge_tps("1K2")
         
-        # Verificar que se creó el archivo unificado
-        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
+        # Verificar que se creó el archivo unificado (ahora en subcarpeta 'tps')
+        output_file = os.path.join(test_dirs['output'], "1K2", "tps", "TPs_1K2_unificado.csv")
         assert os.path.exists(output_file)
         
         # Verificar contenido
@@ -85,8 +85,8 @@ class TestTPManagerAttempts:
         # Ejecutar merge
         tp_manager.merge_tps("1K2")
         
-        # Leer resultado
-        output_file = os.path.join(test_dirs['output'], "1K2", "TPs_1K2_unificado.csv")
+        # Leer resultado (ubicación actualizada a subcarpeta 'tps')
+        output_file = os.path.join(test_dirs['output'], "1K2", "tps", "TPs_1K2_unificado.csv")
         
         with open(output_file, 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
