@@ -22,123 +22,6 @@ mkdir -p release
 echo "✅ Directorio limpio"
 echo ""
 
-# Función para crear README de distribución
-create_readme() {
-    local platform=$1
-    local executable=$2
-    
-    cat > "$3" << EOFREADME
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║            ACOCALCULATOR v${VERSION} para ${platform}
-║    Sistema de Gestión de Calificaciones de Moodle          ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-
-🚀 INICIO RÁPIDO
-═══════════════════════════════════════════════════════════════
-
-EOFREADME
-
-    if [ "$platform" = "macOS" ]; then
-        cat >> "$3" << 'EOFREADME'
-Opción 1: Doble clic en ACOCalculator.app
-
-Opción 2: Desde terminal:
-   ./ACOCalculator
-
-⚠️ PRIMERA EJECUCIÓN
-═══════════════════════════════════════════════════════════════
-
-macOS puede mostrar una advertencia de seguridad.
-
-Solución:
-1. Click derecho en ACOCalculator.app
-2. Seleccionar "Abrir"
-3. Confirmar "Abrir" en el diálogo
-EOFREADME
-    elif [ "$platform" = "Windows" ]; then
-        cat >> "$3" << 'EOFREADME'
-Opción 1: Doble clic en ACOCalculator.exe
-
-Opción 2: Desde CMD/PowerShell:
-   ACOCalculator.exe
-
-⚠️ PRIMERA EJECUCIÓN
-═══════════════════════════════════════════════════════════════
-
-Windows Defender puede mostrar una advertencia.
-Esto es normal para binarios sin firma digital.
-
-Solución:
-1. Clic en "Más información"
-2. Clic en "Ejecutar de todas formas"
-EOFREADME
-    else # Linux
-        cat >> "$3" << 'EOFREADME'
-Desde terminal:
-   ./ACOCalculator
-
-⚠️ PRIMERA EJECUCIÓN
-═══════════════════════════════════════════════════════════════
-
-Si obtienes "Permission denied":
-   chmod +x ACOCalculator
-   ./ACOCalculator
-EOFREADME
-    fi
-
-    cat >> "$3" << 'EOFREADME'
-
-📁 ESTRUCTURA
-═══════════════════════════════════════════════════════════════
-
-inputs/     - Coloca aquí tus archivos CSV de Moodle
-outputs/    - Aquí se guardarán los resultados
-config.ini  - Configuración del sistema (editable)
-docs/       - Documentación completa
-
-📖 DOCUMENTACIÓN
-═══════════════════════════════════════════════════════════════
-
-- README.md           - Manual de usuario completo
-- docs/QUICK_START.md - Guía de inicio rápido
-- docs/BINARY_USAGE.md - Uso detallado del binario
-- docs/CONFIGURATION.md - Configuración avanzada
-
-✅ CARACTERÍSTICAS
-═══════════════════════════════════════════════════════════════
-
-✓ No requiere Python instalado
-✓ Incluye todas las dependencias
-✓ Procesamiento automático de calificaciones
-✓ Unificación de TPs y Parciales
-✓ Generación de planillas finales en XLS
-✓ Seguimiento de intentos por estudiante
-✓ Consolidación automática de múltiples archivos
-✓ Conversión de notas según escala de cátedra
-
-🆘 SOPORTE
-═══════════════════════════════════════════════════════════════
-
-Si encuentras problemas:
-
-1. Revisa docs/BINARY_USAGE.md para troubleshooting
-
-2. Verifica que config.ini existe
-
-3. Asegúrate de que los CSV están en inputs/
-
-4. Consulta la documentación completa en README.md
-
-═══════════════════════════════════════════════════════════════
-
-Versión: 1.0.0
-Repositorio: https://github.com/Laikos38/ACOcalculator
-Copyright © 2025 ACOCalculator
-EOFREADME
-}
-
 # Función para copiar archivos comunes
 copy_common_files() {
     local dest_dir=$1
@@ -194,11 +77,6 @@ if [ -d "dist/ACOCalculator.app" ] || [ -f "dist/ACOCalculator" ]; then
     copy_common_files "release/${RELEASE_NAME}"
     echo "  ✓ Configuración y documentación"
     
-    # Crear README de distribución
-    create_readme "macOS" "ACOCalculator.app" "release/${RELEASE_NAME}/LEEME.txt"
-    echo "  ✓ LEEME.txt"
-    echo ""
-    
     echo "🗜️  Comprimiendo release macOS..."
     cd release
     zip -r -q "${RELEASE_NAME}.zip" "${RELEASE_NAME}"
@@ -235,11 +113,6 @@ if [ -f "dist/ACOCalculator.exe" ]; then
     # Copiar archivos comunes
     copy_common_files "release/${RELEASE_NAME}"
     echo "  ✓ Configuración y documentación"
-    
-    # Crear README de distribución
-    create_readme "Windows" "ACOCalculator.exe" "release/${RELEASE_NAME}/LEEME.txt"
-    echo "  ✓ LEEME.txt"
-    echo ""
     
     echo "🗜️  Comprimiendo release Windows..."
     cd release
@@ -287,11 +160,6 @@ if [ -f "dist/ACOCalculator" ] && [ ! -d "dist/ACOCalculator.app" ]; then
     copy_common_files "release/${RELEASE_NAME}"
     echo "  ✓ Configuración y documentación"
     
-    # Crear README de distribución
-    create_readme "Linux (${ARCH})" "ACOCalculator" "release/${RELEASE_NAME}/LEEME.txt"
-    echo "  ✓ LEEME.txt"
-    echo ""
-    
     echo "🗜️  Comprimiendo release Linux..."
     cd release
     tar -czf "${RELEASE_NAME}.tar.gz" "${RELEASE_NAME}"
@@ -326,7 +194,6 @@ echo "📊 Contenido de cada release:"
 echo "  ✓ Binario ejecutable"
 echo "  ✓ config.ini (configuración)"
 echo "  ✓ README.md (manual completo)"
-echo "  ✓ LEEME.txt (inicio rápido)"
 echo "  ✓ docs/ (documentación completa)"
 echo "  ✓ inputs/ (directorio para CSVs)"
 echo "  ✓ outputs/ (directorio para resultados)"
