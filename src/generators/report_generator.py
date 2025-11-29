@@ -139,6 +139,7 @@ class ReportGenerator:
                 f"{self.tp_prefix}{i}_Nota",
                 f"{self.tp_prefix}{i}_Intentos"
             ])
+        columns.extend(["TPs_Aprobados"])
         
         # Agregar columnas de Parciales
         for i in range(1, self.exam_count + 1):
@@ -180,6 +181,7 @@ class ReportGenerator:
             col_idx += 1
             
             # TPs (con intentos)
+            approved_tps = 0
             for i in range(1, self.tp_count + 1):
                 ws.write(row, col_idx, self._format_decimal_grade(tp_data.get(f"{self.tp_prefix}{i}", "")))
                 col_idx += 1
@@ -187,6 +189,11 @@ class ReportGenerator:
                 col_idx += 1
                 ws.write(row, col_idx, self._format_attempts(tp_data.get(f"{self.tp_prefix}{i}_Intentos", "")))
                 col_idx += 1
+                grade = tp_data.get(f"{self.tp_prefix}{i}_Nota", "")
+                if grade and int(grade) >= 4:
+                    approved_tps += 1
+            ws.write(row, col_idx, approved_tps)
+            col_idx += 1
             
             # Parciales
             for i in range(1, self.exam_count + 1):
