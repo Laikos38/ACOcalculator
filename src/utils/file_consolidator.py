@@ -57,7 +57,7 @@ def find_files_case_insensitive(directory: str, base_pattern: str) -> List[str]:
 class FileConsolidator:
     """Clase para consolidar múltiples archivos CSV de un mismo TP o Parcial."""
     
-    def __init__(self, source_dir: str, output_dir: str, header_map: Dict, encoding: str = 'utf-8-sig', calculate_avg_grades: bool = False):
+    def __init__(self, source_dir: str, output_dir: str, header_map: Dict, type: str, encoding: str = 'utf-8-sig', calculate_avg_grades: bool = False):
         """
         Inicializa el consolidador de archivos.
         
@@ -65,12 +65,14 @@ class FileConsolidator:
             source_dir: Directorio de archivos de entrada
             output_dir: Directorio de archivos de salida
             header_map: Mapeo de nombres de columnas
+            type: Tipo de archivo ("tps" o "parciales")
             encoding: Encoding de archivos CSV
             calculate_avg_grades: Si False, filtra la fila "Promedio general" de Moodle
         """
         self.source_dir = source_dir
         self.output_dir = output_dir
         self.header_map = header_map
+        self.type = type
         self.encoding = encoding
         self.calculate_avg_grades = calculate_avg_grades
     
@@ -100,9 +102,9 @@ class FileConsolidator:
         parts = base_name.split("_")
         if len(parts) >= 2:
             course_dir = parts[-1].upper()  # Último elemento es el curso, normalizar a mayúsculas
-            output_course_dir = os.path.join(self.output_dir, course_dir)
+            output_course_dir = os.path.join(self.output_dir, course_dir, self.type)
         else:
-            output_course_dir = self.output_dir
+            output_course_dir = self.output_dir + self.type
         
         # Crear el directorio de salida al inicio
         os.makedirs(output_course_dir, exist_ok=True)

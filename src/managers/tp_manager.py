@@ -39,6 +39,7 @@ class TPManager:
             self.source_dir,
             self.output_dir,
             self.header_map,
+            "tps",
             self.encoding,
             self.calculate_avg_grades
         )
@@ -64,6 +65,7 @@ class TPManager:
         
         # Directorio de salida específico del curso (ya normalizado)
         output_course_dir = os.path.join(self.output_dir, course)
+        output_course_dir = os.path.join(output_course_dir, "tps")
         
         for tp, base_name in files.items():
             filtered_file = os.path.join(output_course_dir, base_name + "_filtrado.csv")

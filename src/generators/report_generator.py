@@ -28,7 +28,7 @@ class ReportGenerator:
         self.exam_prefix = config.get_parcial_prefix()
         self.makeup_prefix = config.get_recuperatorio_prefix()
     
-    def generate_final_report(self, course: str, tp_manager=None, exam_manager=None):
+    def generate_final_report(self, course: str, tp_manager, exam_manager):
         """
         Genera una planilla final consolidada combinando TPs y Parciales en formato XLS.
         Incluye tanto las notas decimales de Moodle como las notas convertidas a enteros.
@@ -50,56 +50,36 @@ class ReportGenerator:
         output_course_dir = os.path.join(self.output_dir, course)
         
         # Archivos mergeados de TPs y Parciales
-        tps_file = os.path.join(output_course_dir, f"{self.tp_prefix}s_{course}_unificado.csv")
-        exams_file = os.path.join(output_course_dir, f"{self.exam_prefix}es_{course}_unificado.csv")
+        tps_file = os.path.join(output_course_dir, "tps", f"{self.tp_prefix}s_{course}_unificado.csv")
+        exams_file = os.path.join(output_course_dir, "parciales", f"{self.exam_prefix}es_{course}_unificado.csv")
         
         # Variables para controlar qué datos están disponibles
         tps_data = {}
         exams_data = {}
         has_tps = False
         has_exams = False
-        
-        # Intentar obtener datos de TPs
-        if not os.path.exists(tps_file):
-            print(f"⚠️ No se encontró el archivo de TPs unificado: {tps_file}")
-            print(f"   Se intentará generar el archivo unificado...")
-            if tp_manager:
-                generate = input("¿Quieres unificar los TPs ahora? (S/n) [S]: ").strip().lower()
-                if generate == '' or generate == 's':
-                    tp_manager.merge_tps(course)
-                    if os.path.exists(tps_file):
-                        tps_data = self._read_csv_as_dict(tps_file)
-                        has_tps = True
-                    else:
-                        print("⚠️ No hay datos de TPs disponibles. Continuando sin TPs...")
-                else:
-                    print("⚠️ Continuando sin datos de TPs...")
-            else:
-                print("⚠️ Continuando sin datos de TPs...")
-        else:
+
+        # Obtener datos de TPs
+        if os.path.exists(tps_file):
+            os.remove(tps_file)
+        print(f"   Procesando TPs...")
+        tp_manager.merge_tps(course)
+        if os.path.exists(tps_file):
             tps_data = self._read_csv_as_dict(tps_file)
             has_tps = True
-        
-        # Intentar obtener datos de Parciales
-        if not os.path.exists(exams_file):
-            print(f"⚠️ No se encontró el archivo de Parciales unificado: {exams_file}")
-            print(f"   Se intentará generar el archivo unificado...")
-            if exam_manager:
-                generate = input("¿Quieres unificar los Parciales ahora? (S/n) [S]: ").strip().lower()
-                if generate == '' or generate == 's':
-                    exam_manager.merge_exams(course)
-                    if os.path.exists(exams_file):
-                        exams_data = self._read_csv_as_dict(exams_file)
-                        has_exams = True
-                    else:
-                        print("⚠️ No hay datos de Parciales disponibles. Continuando sin Parciales...")
-                else:
-                    print("⚠️ Continuando sin datos de Parciales...")
-            else:
-                print("⚠️ Continuando sin datos de Parciales...")
         else:
+            print("⚠️ No hay datos de TPs disponibles. Continuando sin TPs...")
+        
+        # Obtener datos de Parciales
+        if os.path.exists(exams_file):
+            os.remove(exams_file)
+        print(f"   Procesando parciales...")
+        exam_manager.merge_exams(course)
+        if os.path.exists(exams_file):
             exams_data = self._read_csv_as_dict(exams_file)
             has_exams = True
+        else:
+            print("⚠️ No hay datos de Parciales disponibles. Continuando sin Parciales...")
         
         # Combinar todos los IDs únicos
         all_ids = set(tps_data.keys()) | set(exams_data.keys())

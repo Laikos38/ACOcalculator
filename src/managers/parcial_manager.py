@@ -38,6 +38,7 @@ class ParcialManager:
             self.source_dir,
             self.output_dir,
             self.header_map,
+            "parciales",
             self.encoding,
             self.calculate_avg_grades
         )
@@ -67,6 +68,7 @@ class ParcialManager:
         
         # Directorio de salida específico del curso (ya normalizado)
         output_course_dir = os.path.join(self.output_dir, course)
+        output_course_dir = os.path.join(output_course_dir, "parciales")
         
         for evaluation, base_name in files.items():
             filtered_file = os.path.join(output_course_dir, base_name + "_filtrado.csv")
