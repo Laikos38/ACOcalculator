@@ -7,6 +7,7 @@
 
 Otros:
 - [Como abrir archivos CSV en Excel](./docs/CSV_ON_EXCEL.md)
+- [Recomendación para windows: Instalar Windows Terminal](./docs/WINDOWS_TERMINAL.md)
 
 ---
 
@@ -26,8 +27,9 @@ Este sistema te ayuda a procesar las calificaciones de Moodle de forma automáti
 ### Usar el Ejecutable
 
 1. Descarga el ejecutable que corresponda según tu SO desde [Releases](https://github.com/Laikos38/ACOcalculator/releases)
-2. Doble click para ejecutar
-3. ¡Listo! El programa crea las carpetas necesarias automáticamente
+2. Descomprimir el programa
+3. Doble click en el ejecutable para lanzar el programa
+4. ¡Listo! El programa crea las carpetas necesarias automáticamente
 
 ---
 
@@ -37,7 +39,7 @@ Este sistema te ayuda a procesar las calificaciones de Moodle de forma automáti
 
 1. Entra a tu curso en Moodle
 2. Ve al TP, parcial o recuperatorio que desees procesar, luego click en "Intentos" 
-3. Selecciona formato **CSV** y modifica el tamaño de la página para que incluya todos los intentos
+3. Selecciona formato **CSV** y modifica el tamaño de la página para que incluya todos los intentos. **Verificar que ningún filtro que excluya alumnos esté habilitado**.
 4. Exporta/descarga el archivo
 
 ### Paso 2: Organizar archivos
@@ -141,7 +143,7 @@ Si un alumno entregó varias veces el mismo TP, esta opción se queda solo con e
 **Pasos:**
 1. Selecciona sub-opción `1`
 2. Elige el archivo CSV de la lista
-3. El resultado se guarda en `outputs/CURSO/archivo_filtrado.csv`
+3. El resultado se guarda en `outputs/CURSO/tps/archivo_filtrado.csv`
 
 #### Sub-opción 2: Unificar TPs
 
@@ -151,7 +153,7 @@ Junta todos los TPs de un curso en UN SOLO archivo.
 **Pasos:**
 1. Selecciona sub-opción `2`
 2. Escribe el código del curso (ej: `1K2`)
-3. Se crea `outputs/1K2/TPs_1K2_unificado.csv`
+3. Se crea `outputs/1K2/tps/TPs_1K2_unificado.csv`
 
 **📊 El archivo incluye:**
 - Apellido y Nombre del alumno
@@ -167,7 +169,7 @@ Igual que la sub-opción 2, pero para Parciales y Recuperatorios.
 **Pasos:**
 1. Selecciona sub-opción `3`
 2. Escribe el código del curso
-3. Se crea `outputs/1K2/Parciales_1K2_unificado.csv`
+3. Se crea `outputs/1K2/parciales/Parciales_1K2_unificado.csv`
 
 ### Opción h: Ayuda
 
@@ -218,7 +220,7 @@ Cierra el programa.
    → Escribir: 1K2
 
 4. ¡Listo! Resultado en:
-   outputs/1K2/TPs_1K2_unificado.csv
+   outputs/1K2/tps/TPs_1K2_unificado.csv
 ```
 
 ---
