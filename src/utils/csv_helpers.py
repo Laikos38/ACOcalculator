@@ -21,7 +21,7 @@ def is_average_row(row: Dict, header_map: Dict) -> bool:
         True si es una fila de promedio general, False en caso contrario
     """
     # Buscar la columna de nombre
-    nombre_col = get_col_name_safe(row.keys(), header_map["nombre"])
+    nombre_col = get_col_name_safe(row.keys(), header_map["apellido"])
     if not nombre_col:
         return False
     

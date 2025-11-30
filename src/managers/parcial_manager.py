@@ -74,11 +74,11 @@ class ParcialManager:
             filtered_file = os.path.join(output_course_dir, base_name + "_filtrado.csv")
             
             # Si no existe el filtrado, generarlo desde el/los source(s)
-            if not os.path.exists(filtered_file):
-                print(f"⚠️ No se encontró el archivo filtrado para {base_name}. Generando desde archivos en inputs/...")
-                if not self.consolidator.consolidate_multiple_files(base_name, course):
-                    print(f"⚠️ No se encontraron archivos en inputs/ para {base_name}. Se ignorará.")
-                    continue
+            # if not os.path.exists(filtered_file):
+            #     print(f"⚠️ No se encontró el archivo filtrado para {base_name}. Generando desde archivos en inputs/...")
+            if not self.consolidator.consolidate_multiple_files(base_name, course):
+                print(f"⚠️ No se encontraron archivos en inputs/ para {base_name}. Se ignorará.")
+                continue
             
             # Leer el archivo filtrado (ya existente o recién generado)
             with open(filtered_file, newline='', encoding=self.encoding) as f:
